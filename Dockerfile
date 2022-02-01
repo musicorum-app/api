@@ -10,6 +10,6 @@ RUN /usr/local/bin/node-prune
 
 FROM node:14-alpine
 WORKDIR /app
-COPY --from=builder /src .
+COPY --from=builder /src/dist ./dist
 EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD [ "npm", "start:prod" ]

@@ -12,7 +12,6 @@ import { HttpExceptionFilter } from './filters/http-exception.filter'
 import type { RedisClientOptions, RedisScripts } from 'redis'
 import { CollagesController } from './services/collages/collages.controller'
 import * as redisStore from 'cache-manager-redis-store'
-import { BullModule } from '@nestjs/bull'
 import { themes } from './themes/themes'
 import { ValidationService } from './services/validation/validation.service'
 import { LastfmService } from './services/api/lastfm/lastfm.service'
@@ -29,9 +28,6 @@ import { CollagesService } from './services/collages/collages.service'
       store: redisStore,
       url: process.env.REDIS_URL,
       ttl: 60 * 60, // 1 hour
-    }),
-    BullModule.forRoot({
-      prefix: 'bull:',
     }),
   ],
   controllers: [MusicorumController, WorkersController, CollagesController],
