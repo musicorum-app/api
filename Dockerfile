@@ -12,4 +12,4 @@ FROM node:14-alpine
 WORKDIR /app
 COPY --from=builder /src/dist ./dist
 EXPOSE 3000
-CMD [ "npm", "start:prod" ]
+CMD [ "npm", "run", "start:prod" ]
