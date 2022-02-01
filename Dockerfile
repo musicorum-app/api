@@ -10,6 +10,7 @@ WORKDIR /app
 
 COPY --from=builder /src/dist ./dist
 COPY --from=builder /src/package*.json ./
+COPY --from=builder /src/.prisma ./
 RUN npm ci
 RUN npm prune --production
 
