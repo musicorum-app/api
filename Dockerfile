@@ -12,7 +12,7 @@ FROM node:14-alpine
 WORKDIR /app
 
 COPY --from=builder /src/dist ./dist
-COPY --from=builder /src/package*.json .
+COPY --from=builder /src/package*.json ./
 
 EXPOSE 3000
 CMD [ "npm", "run", "start:prod" ]
