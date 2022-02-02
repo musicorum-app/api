@@ -16,10 +16,13 @@ import { themes } from './themes/themes'
 import { ValidationService } from './services/validation/validation.service'
 import { LastfmService } from './services/api/lastfm/lastfm.service'
 import { CollagesService } from './services/collages/collages.service'
+import configuration from './configuration'
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
     SentryModule.forRoot({
       dsn: process.env.SENTRY_DSN,
       debug: true,

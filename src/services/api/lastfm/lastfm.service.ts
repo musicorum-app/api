@@ -1,8 +1,13 @@
 import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { Cache } from 'cache-manager'
+import { defaultAlbumImage, Period, PeriodResolvable } from 'src/constants'
 import { LastfmException } from 'src/exceptions/lastfm.exception'
-import { LastfmUserInfo } from './lastfm.types'
+import {
+  LastfmImages,
+  LastfmTopAlbumsResponse,
+  LastfmUserInfo,
+} from './lastfm.types'
 
 @Injectable()
 export class LastfmService {
@@ -14,10 +19,10 @@ export class LastfmService {
     }
   }
 
-  public async request(
+  public async request<D = Record<string, any>>(
     method: string,
-    params: Record<string, string>,
-  ): Promise<Record<string, any> | null> {
+    params: Record<string, any>,
+  ): Promise<D> {
     this.logger.verbose(`Doing request on last.fm for method '${method}'`)
     try {
       const res = await axios.get('http://ws.audioscrobbler.com/2.0/', {
@@ -86,5 +91,38 @@ export class LastfmService {
         return null
       else throw error
     }
+  }
+
+  public async getAlbumsChart(
+    user: string,
+    period: PeriodResolvable,
+    limit?: number,
+  ) {
+    if (Array.isArray(period)) {
+      // Custom period
+      period
+    } else {
+      const { topalbums } = await this.request('user.getTopAlbums', {
+        user,
+        period: period.toLowerCase(),
+        limit,
+      })
+
+      return {
+        fromWeekly: true,
+        items: topalbums.album.slice(0, limit).map((album) => ({
+          name: album.name,
+          artist: album.artist.name,
+          playCount: parseInt(album.playcount),
+          image: LastfmService.parseImage(album.image, defaultAlbumImage),
+        })),
+      }
+    }
+  }
+
+  static parseImage(images: LastfmImages, defaultImage: string) {
+    return images[3]['#text'] && images[3]['#text'] !== ''
+      ? images[3]['#text']
+      : defaultImage
   }
 }

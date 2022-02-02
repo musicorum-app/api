@@ -7,38 +7,63 @@ import {
 import { CollageRequest } from 'src/services/collages/collages.interface'
 import { IGridTheme, Theme } from '../theme.interface'
 import { LastfmService } from 'src/services/api/lastfm/lastfm.service'
+import { ConfigService } from '@nestjs/config'
+import { Entity } from 'src/constants'
 
+interface ITile {
+  image: string
+  name: string
+  secondary?: string
+  scrobbles?: number
+}
 @Injectable()
 export class GridTheme implements Theme {
   public name = 'grid'
   public requiresUserData = false
 
-  constructor(private lastfmService: LastfmService) {}
+  constructor(
+    private lastfmService: LastfmService,
+    private configService: ConfigService,
+  ) {}
 
   async handleDate({
     user,
     options,
   }: CollageRequest<IGridTheme>): Promise<Record<string, any>> {
+    let tiles = [] as ITile[]
+    const limit = options.columns * options.rows
+
+    if (options.entity === Entity.ALBUM) {
+      const { fromWeekly, items } = await this.lastfmService.getAlbumsChart(
+        user,
+        options.period,
+        limit,
+      )
+
+      tiles = items.map((album) => ({
+        name: album.name,
+        secondary: album.artist,
+        image: album.image,
+        scrobbles: album.playCount,
+      }))
+    }
+
+    console.log({
+      rows: options.rows,
+      columns: options.columns,
+      show_names: options.show_names,
+      show_playcount: options.show_playcount,
+      tile_size: this.configService.get<string>('themes.grid.tile_size'),
+      tiles,
+    })
+
     return {
       rows: options.rows,
       columns: options.columns,
       show_names: options.show_names,
       show_playcount: options.show_playcount,
-      tile_size: 200,
-      tiles: [
-        {
-          image:
-            'https://i.scdn.co/image/ab67616d0000b2736040effba89b9b00a6f6743a',
-          name: 'Replay',
-          sub: 'Lady Gaga',
-        },
-        {
-          image:
-            'https://i.scdn.co/image/ab67616d0000b2733899712512f50a8d9e01e951',
-          name: 'Play Date',
-          sub: 'Melanie Martinez',
-        },
-      ],
+      tile_size: this.configService.get<string>('themes.grid.tile_size'),
+      tiles,
     }
   }
 

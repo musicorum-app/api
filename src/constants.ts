@@ -7,6 +7,8 @@ export enum Period {
   OVERALL = 'OVERALL',
 }
 
+export type PeriodResolvable = Period | [number, number]
+
 export enum Entity {
   ARTIST = 'ARTIST',
   ALBUM = 'ALBUM',

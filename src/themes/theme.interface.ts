@@ -1,5 +1,5 @@
 import { CollageRequest } from 'src/services/collages/collages.interface'
-import { Entity, Period } from 'src/constants'
+import { Entity, Period, PeriodResolvable } from 'src/constants'
 import Joi from 'joi'
 import { ThemeType } from './themes'
 
@@ -16,7 +16,7 @@ export interface IGridTheme {
   columns: number
   show_names: boolean
   show_playcount: boolean
-  period: Period
+  period: PeriodResolvable
   entity: Entity
   style: 'DEFAULT' | 'CAPTION' | 'SHADOW'
 }
