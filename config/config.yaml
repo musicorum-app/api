@@ -3,6 +3,9 @@
 themes:
   grid:
     tile_size: 300
+    tile_size_25: 200
+    tile_size_100: 180
+    tile_size_250: 160
   duotone:
     palettes:
       PURPLISH: [ '#16006F', '#F7396F' ]

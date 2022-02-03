@@ -48,12 +48,24 @@ export class GridTheme implements Theme {
       }))
     }
 
+    let tileSize = this.configService.get<string>('themes.grid.tile_size')
+
+    if (limit >= 250) {
+      tileSize = this.configService.get<string>('themes.grid.tile_size_250')
+    } else if (limit >= 100) {
+      tileSize = this.configService.get<string>('themes.grid.tile_size_100')
+    } else if (limit >= 25) {
+      tileSize = this.configService.get<string>('themes.grid.tile_size_25')
+    }
+
+    console.log(tileSize)
+
     return {
       rows: options.rows,
       columns: options.columns,
       show_names: options.show_names,
       show_playcount: options.show_playcount,
-      tile_size: this.configService.get<string>('themes.grid.tile_size'),
+      tile_size: tileSize,
       tiles,
       style: options.style,
     }

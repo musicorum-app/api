@@ -63,8 +63,6 @@ export class CollagesService {
         message: 'Worker data handled',
       })
 
-      console.log(workerData)
-
       let user = null
       if (theme.requiresUserData) {
         user = await this.lastfmService.userGetInfo(data.user)
