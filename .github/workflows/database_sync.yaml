@@ -15,3 +15,5 @@ jobs:
         run: |
           echo "Running prisma db push"
           npx prisma db push
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_SYNC_URL }}
