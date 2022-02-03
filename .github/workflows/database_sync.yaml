@@ -4,8 +4,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  log-the-inputs:
+  prisma-sync:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "SYNC"
+      - name: Checkout repository
+        uses: actions/checkout@master
+      - name: Setup node
+        uses: actions/setup-node@v2
+      - name: Push prisma scheme
+        run: |
+          echo "Running prisma db push"
+          npx prisma db push
