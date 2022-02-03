@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { WorkerGenerationResponse } from 'src/types/common'
 
 export class Worker {
   public name: string
@@ -31,7 +32,13 @@ export class Worker {
     this.available = true
   }
 
-  generate(data: Record<string, any>) {
-    return axios.post(`${this.url}/generate`, data).then((r) => r.data)
+  async generate(data: Record<string, any>, traceId?: string) {
+    return axios
+      .post<WorkerGenerationResponse>(`${this.url}/generate`, data, {
+        headers: {
+          'sentry-trace': traceId,
+        },
+      })
+      .then((r) => r.data)
   }
 }

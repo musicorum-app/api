@@ -13,7 +13,7 @@ model Application {
   key        String    @unique @db.VarChar(32)
   secret     String    @unique @db.VarChar(32)
   created_at DateTime  @default(now())
-  updated_at DateTime
+  updated_at DateTime?
   Collage    Collage[]
 }
 
@@ -26,8 +26,8 @@ model Collage {
   file               String?
   theme              String?     @db.VarChar(32)
   error              String?
-  app_id             String      @db.VarChar(16)
+  app_id             String?     @db.VarChar(16)
   created_at         DateTime    @default(now())
-  updated_at         DateTime
-  application        Application @relation(fields: [app_id], references: [id])
+  updated_at         DateTime?
+  application        Application? @relation(fields: [app_id], references: [id])
 }

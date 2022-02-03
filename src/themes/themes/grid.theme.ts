@@ -48,15 +48,6 @@ export class GridTheme implements Theme {
       }))
     }
 
-    console.log({
-      rows: options.rows,
-      columns: options.columns,
-      show_names: options.show_names,
-      show_playcount: options.show_playcount,
-      tile_size: this.configService.get<string>('themes.grid.tile_size'),
-      tiles,
-    })
-
     return {
       rows: options.rows,
       columns: options.columns,

@@ -4,12 +4,16 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common'
+import { SentryService } from '@ntegral/nestjs-sentry'
 import { ApplicationService } from 'src/services/application/application.service'
 import { RequestWithApplication } from 'src/types/common'
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
-  constructor(private applicationService: ApplicationService) {}
+  constructor(
+    private applicationService: ApplicationService,
+    private sentry: SentryService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context
@@ -27,6 +31,10 @@ export class ApiKeyGuard implements CanActivate {
     if (!app) throw new UnauthorizedException('Api key not found or invalid')
 
     request.application = app
+    this.sentry.instance().setContext('Application', {
+      name: app.name,
+      id: app.id,
+    })
 
     return true
   }
