@@ -14,7 +14,7 @@ jobs:
       - name: Push prisma scheme
         run: |
           echo "Running prisma db push"
-          echo "Teste $DATABASE_URL"
+          echo "::add-mask::Teste"
           npx prisma db push --skip-generate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_SYNC_URL }}
