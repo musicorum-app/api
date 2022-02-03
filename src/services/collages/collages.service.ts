@@ -63,6 +63,8 @@ export class CollagesService {
         message: 'Worker data handled',
       })
 
+      console.log(workerData)
+
       let user = null
       if (theme.requiresUserData) {
         user = await this.lastfmService.userGetInfo(data.user)
@@ -114,6 +116,7 @@ export class CollagesService {
       return {
         id,
         ...result,
+        url: process.env.RESULT_URL + result.file,
         trace_id: transaction.traceId,
       }
     } catch (error) {

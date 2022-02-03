@@ -55,6 +55,7 @@ export class GridTheme implements Theme {
       show_playcount: options.show_playcount,
       tile_size: this.configService.get<string>('themes.grid.tile_size'),
       tiles,
+      style: options.style,
     }
   }
 
