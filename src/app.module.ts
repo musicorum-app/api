@@ -3,7 +3,7 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
-  RequestMethod,
+  RequestMethod
 } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MusicorumController } from './app.controller'
@@ -26,12 +26,14 @@ import configuration from './configuration'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 import { ExpressAdapter } from '@nestjs/platform-express'
+import { ResourcesService } from './services/resources/resources.service'
+import { ResourcesController } from './services/resources/resources.controller'
 
 console.log(process.env.NODE_ENV)
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [configuration],
+      load: [configuration]
     }),
     SentryModule.forRootAsync({
       inject: [HttpAdapterHost],
@@ -41,19 +43,24 @@ console.log(process.env.NODE_ENV)
         integrations: [
           new Sentry.Integrations.Http({ tracing: true }),
           new Tracing.Integrations.Express({
-            app: adapter.httpAdapter.getInstance(),
-          }),
+            app: adapter.httpAdapter.getInstance()
+          })
         ],
-        tracesSampleRate: 1.0,
-      }),
+        tracesSampleRate: 1.0
+      })
     }),
     CacheModule.register<RedisClientOptions<never, RedisScripts>>({
       store: redisStore,
       url: process.env.REDIS_URL,
-      ttl: 60 * 60, // 1 hour
-    }),
+      ttl: 60 * 60 // 1 hour
+    })
   ],
-  controllers: [MusicorumController, WorkersController, CollagesController],
+  controllers: [
+    MusicorumController,
+    WorkersController,
+    CollagesController,
+    ResourcesController
+  ],
   providers: [
     MusicorumService,
     WorkersService,
@@ -61,13 +68,14 @@ console.log(process.env.NODE_ENV)
     ApplicationService,
     {
       provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
+      useClass: HttpExceptionFilter
     },
     ...Object.values(themes),
     ValidationService,
     LastfmService,
     CollagesService,
-  ],
+    ResourcesService
+  ]
 })
 export class MusicorumModule implements NestModule {
   constructor(private sentry: SentryService) {}
@@ -76,12 +84,12 @@ export class MusicorumModule implements NestModule {
       .apply(this.sentry.instance().Handlers.requestHandler())
       .forRoutes({
         path: '*',
-        method: RequestMethod.ALL,
+        method: RequestMethod.ALL
       })
       .apply(this.sentry.instance().Handlers.tracingHandler())
       .forRoutes({
         path: '*',
-        method: RequestMethod.ALL,
+        method: RequestMethod.ALL
       })
   }
 }

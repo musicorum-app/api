@@ -1,0 +1,25 @@
+version: '3.3'
+services:
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: pass
+    volumes:
+     - db:/var/lib/postgresql/data
+  manager:
+    image: musicorum/resource-manager:latest
+    environment:
+      CORS_ORIGINS: '*'
+      DATABASE_URL: postgres://postgres:pass@database:5432/resources
+      LASTFM_KEY: '${LASTFM_KEY}'
+      PORT: '4040'
+      REDIS_HOST: redis
+      REDIS_PORT: '6379'
+      SPOTIFY_ID: '${SPOTIFY_ID}'
+      SPOTIFY_SECRET: '${SPOTIFY_SECRET}'
+    ports:
+    - 4040:4040
+  redis:
+    image: redis:latest
+volumes:
+  db:
