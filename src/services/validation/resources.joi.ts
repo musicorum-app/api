@@ -20,8 +20,8 @@ export const trackResourcesPayloadJoi = Joi.object({
     .items(
       Joi.object({
         name: Joi.string().required(),
-        artist: Joi.string(),
-        album: Joi.string()
+        artist: Joi.string().allow(null),
+        album: Joi.string().allow(null)
       })
     )
     .required()
