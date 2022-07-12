@@ -36,8 +36,8 @@ export class Worker {
     return axios
       .post<WorkerGenerationResponse>(`${this.url}/generate`, data, {
         headers: {
-          'sentry-trace': traceId,
-        },
+          'sentry-trace': traceId || ''
+        }
       })
       .then((r) => r.data)
   }

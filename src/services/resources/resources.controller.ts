@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Query, UseGuards } from '@nestjs/common'
+import { Body, Controller, Post, Query, UseGuards } from '@nestjs/common'
 import { ApiKeyGuard } from 'src/guards/api-key.guard'
 import {
   albumResourcesPayloadJoi,

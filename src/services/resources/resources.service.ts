@@ -5,6 +5,8 @@ import {
   AlbumRequestItem,
   AlbumResource,
   ArtistResource,
+  IHaveImageResources,
+  Nullable,
   ResourceFinderParams,
   TrackRequestItem,
   TrackResource
@@ -24,9 +26,9 @@ export class ResourcesService {
     })
   }
 
-  public async findArtists(artists: string[], params: ResourceFinderParams) {
+  public async findArtists(artists: string[], params?: ResourceFinderParams) {
     return this.instance
-      .post<ArtistResource[]>(
+      .post<Nullable<ArtistResource>[]>(
         '/find/artists',
         {
           artists
@@ -57,7 +59,7 @@ export class ResourcesService {
 
   public async findTracks(
     tracks: TrackRequestItem[],
-    params: ResourceFinderParams
+    params?: ResourceFinderParams
   ) {
     return this.instance
       .post<TrackResource[]>(
@@ -71,4 +73,13 @@ export class ResourcesService {
       )
       .then((res) => res.data)
   }
+
+  static getPrefferedImageResource(resource: IHaveImageResources) {
+    return resource.resources.find(
+      (r) => r.hash === resource.preferred_resource
+    )
+  }
 }
+
+export const getPrefferedImageResource =
+  ResourcesService.getPrefferedImageResource

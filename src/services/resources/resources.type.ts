@@ -1,5 +1,4 @@
-export type Nullable<T> = T | null
-
+export type Nullable<T> = null | T
 export interface ResourceFinderParams {
   popularity?: number
   palette?: boolean
@@ -50,7 +49,12 @@ export interface AlbumRequestItem {
   artist: string
 }
 
-export interface AlbumResource {
+export interface IHaveImageResources {
+  resources: ImageResourceResponse[]
+  preferred_resource: Nullable<string>
+}
+
+export interface AlbumResource extends IHaveImageResources {
   hash: string
   name: string
   artists: string[]
@@ -60,14 +64,11 @@ export interface AlbumResource {
   spotify_id: Nullable<string>
   deezer_id: Nullable<number>
 
-  resources: ImageResourceResponse[]
-  preferred_resource: Nullable<string>
-
   created_at: string
   updated_at: Nullable<string>
 }
 
-export interface ArtistResource {
+export interface ArtistResource extends IHaveImageResources {
   hash: string
   name: string
 
@@ -79,12 +80,11 @@ export interface ArtistResource {
   similar: string[]
   popularity: Nullable<number>
 
-  resources: ImageResourceResponse[]
-  preferred_resource: Nullable<string>
-
   created_at: string
   updated_at: Nullable<string>
 }
+
+export type ArtistResourcesResponse = Nullable<ArtistResource>[]
 
 export interface TrackRequestItem {
   name: string
@@ -104,7 +104,7 @@ export interface TrackResourceFeatures {
   tempo: number
 }
 
-export interface TrackResource {
+export interface TrackResource extends IHaveImageResources {
   hash: string
   name: string
   artists: string[]
@@ -118,9 +118,6 @@ export interface TrackResource {
   duration: Nullable<number>
   preview: Nullable<string>
   explicit: Nullable<boolean>
-
-  resources: ImageResourceResponse[]
-  preferred_resource: Nullable<string>
 
   created_at: string
   updated_at: Nullable<string>

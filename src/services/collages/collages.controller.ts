@@ -8,7 +8,7 @@ import { CollagesService } from './collages.service'
 export class CollagesController {
   constructor(
     private validationService: ValidationService,
-    private collagesService: CollagesService,
+    private collagesService: CollagesService
   ) {}
 
   @UseGuards(ApiKeyGuard)

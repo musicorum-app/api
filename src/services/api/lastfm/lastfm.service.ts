@@ -52,7 +52,7 @@ export class LastfmService {
   ): Promise<null | Record<string, any>> {
     if (bypassCache) return null
     const cached = await this.cacheService.get(key)
-    return cached && cached !== {} ? cached : null
+    return cached && typeof cached === 'object' && cached !== {} ? cached : null
   }
 
   public async userGetInfo(
@@ -96,7 +96,10 @@ export class LastfmService {
   ) {
     if (Array.isArray(period)) {
       // Custom period
-      period
+      return {
+        fromWeekly: true,
+        items: []
+      }
     } else {
       const { topalbums } = await this.request('user.getTopAlbums', {
         user,
@@ -105,13 +108,70 @@ export class LastfmService {
       })
 
       return {
-        fromWeekly: true,
+        fromWeekly: false,
         items: topalbums.album.slice(0, limit).map((album) => ({
           name: album.name,
           artist: album.artist.name,
           playCount: parseInt(album.playcount),
           image: LastfmService.parseImage(album.image, defaultAlbumImage)
         }))
+      }
+    }
+  }
+
+  public async getArtistsChart(
+    user: string,
+    period: PeriodResolvable,
+    limit?: number
+  ) {
+    if (Array.isArray(period)) {
+      // Custom period
+      return {
+        fromWeekly: true,
+        items: []
+      }
+    } else {
+      const { topartists } = await this.request('user.getTopArtists', {
+        user,
+        period: period.toLowerCase(),
+        limit
+      })
+
+      return {
+        fromWeekly: false,
+        items: topartists.artist.slice(0, limit).map((artist) => ({
+          name: artist.name,
+          playCount: parseInt(artist.playcount)
+        })) as { name: string; playCount: number }[]
+      }
+    }
+  }
+
+  public async getTracksChart(
+    user: string,
+    period: PeriodResolvable,
+    limit?: number
+  ) {
+    if (Array.isArray(period)) {
+      // Custom period
+      return {
+        fromWeekly: true,
+        items: []
+      }
+    } else {
+      const { toptracks } = await this.request('user.getTopTracks', {
+        user,
+        period: period.toLowerCase(),
+        limit
+      })
+
+      return {
+        fromWeekly: false,
+        items: toptracks.track.slice(0, limit).map((track) => ({
+          name: track.name,
+          artist: track.artist.name,
+          playCount: parseInt(track.playcount)
+        })) as { name: string; artist: string; playCount: number }[]
       }
     }
   }

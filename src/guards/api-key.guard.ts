@@ -2,7 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common'
 import { SentryService } from '@ntegral/nestjs-sentry'
 import { ApplicationService } from 'src/services/application/application.service'
@@ -12,7 +12,7 @@ import { RequestWithApplication } from 'src/types/common'
 export class ApiKeyGuard implements CanActivate {
   constructor(
     private applicationService: ApplicationService,
-    private sentry: SentryService,
+    private sentry: SentryService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -33,7 +33,7 @@ export class ApiKeyGuard implements CanActivate {
     request.application = app
     this.sentry.instance().setContext('Application', {
       name: app.name,
-      id: app.id,
+      id: app.id
     })
 
     return true

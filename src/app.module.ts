@@ -5,7 +5,7 @@ import {
   NestModule,
   RequestMethod
 } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigModule } from '@nestjs/config'
 import { MusicorumController } from './app.controller'
 import { MusicorumService } from './app.service'
 import { WorkersService } from './services/workers/workers.service'
@@ -25,7 +25,6 @@ import { CollagesService } from './services/collages/collages.service'
 import configuration from './configuration'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
-import { ExpressAdapter } from '@nestjs/platform-express'
 import { ResourcesService } from './services/resources/resources.service'
 import { ResourcesController } from './services/resources/resources.controller'
 
@@ -46,7 +45,8 @@ console.log(process.env.NODE_ENV)
             app: adapter.httpAdapter.getInstance()
           })
         ],
-        tracesSampleRate: 1.0
+        tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.5 : 1.0,
+        debug: process.env.NODE_ENV !== 'production'
       })
     }),
     CacheModule.register<RedisClientOptions<never, RedisScripts>>({

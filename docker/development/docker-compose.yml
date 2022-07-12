@@ -1,5 +1,15 @@
 version: '3.3'
 services:
+  gorfe:
+    image: musicorum/gorfe:latest
+    ports:
+     - 2037:2037
+    volumes:
+     - /share/export:/home/export
+     - /share/media:/home/media
+     - ./gorfe.yaml:/go/app/bin/config.yaml
+    environment:
+      SENTRY_DSN: $SENTRY_DSN
   database:
     image: postgres:13
     environment:

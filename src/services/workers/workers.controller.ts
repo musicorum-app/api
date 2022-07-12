@@ -18,9 +18,9 @@ export class WorkersController {
           version: worker.version,
           scheme: worker.scheme,
           themes: worker.themes,
-          available: worker.available,
-        }),
-      ),
+          available: worker.available
+        })
+      )
     }
   }
 }
