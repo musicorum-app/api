@@ -27,6 +27,7 @@ export class ResourcesService {
   }
 
   public async findArtists(artists: string[], params?: ResourceFinderParams) {
+    this.logger.verbose(`Finding artists of length ${artists.length}`)
     return this.instance
       .post<Nullable<ArtistResource>[]>(
         '/find/artists',
@@ -44,6 +45,7 @@ export class ResourcesService {
     albums: AlbumRequestItem[],
     params: ResourceFinderParams
   ) {
+    this.logger.verbose(`Finding albums of length ${albums.length}`)
     return this.instance
       .post<AlbumResource[]>(
         '/find/albums',
@@ -61,6 +63,7 @@ export class ResourcesService {
     tracks: TrackRequestItem[],
     params?: ResourceFinderParams
   ) {
+    this.logger.verbose(`Finding tracks of length ${tracks.length}`)
     return this.instance
       .post<TrackResource[]>(
         '/find/tracks',
