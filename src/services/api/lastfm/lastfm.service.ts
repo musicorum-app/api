@@ -1,13 +1,9 @@
 import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common'
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import { Cache } from 'cache-manager'
-import { defaultAlbumImage, Period, PeriodResolvable } from 'src/constants'
+import { defaultAlbumImage, PeriodResolvable } from 'src/constants'
 import { LastfmException } from 'src/exceptions/lastfm.exception'
-import {
-  LastfmImages,
-  LastfmTopAlbumsResponse,
-  LastfmUserInfo,
-} from './lastfm.types'
+import { LastfmImages, LastfmUserInfo } from './lastfm.types'
 
 @Injectable()
 export class LastfmService {
@@ -21,7 +17,7 @@ export class LastfmService {
 
   public async request<D = Record<string, any>>(
     method: string,
-    params: Record<string, any>,
+    params: Record<string, any>
   ): Promise<D> {
     this.logger.verbose(`Doing request on last.fm for method '${method}'`)
     try {
@@ -30,8 +26,8 @@ export class LastfmService {
           method,
           format: 'json',
           api_key: process.env.LASTFM_KEY,
-          ...params,
-        },
+          ...params
+        }
       })
       return res.data
     } catch (error) {
@@ -41,7 +37,7 @@ export class LastfmService {
         error.response.data.error
       ) {
         this.logger.warn(
-          `Last.fm api error: ${error.response.data.message} (${error.response.data.error})`,
+          `Last.fm api error: ${error.response.data.message} (${error.response.data.error})`
         )
         throw new LastfmException(error.response.data)
       } else {
@@ -52,16 +48,16 @@ export class LastfmService {
 
   private async handleCache(
     key: string,
-    bypassCache: boolean,
+    bypassCache: boolean
   ): Promise<null | Record<string, any>> {
     if (bypassCache) return null
     const cached = await this.cacheService.get(key)
-    return cached && cached !== {} ? cached : null
+    return cached && typeof cached === 'object' && cached !== {} ? cached : null
   }
 
   public async userGetInfo(
     user: string,
-    bypassCache = false,
+    bypassCache = false
   ): Promise<LastfmUserInfo | null> {
     const key = `cache:lastfm:user:${user}`
     const cached = await this.handleCache(key, bypassCache)
@@ -75,11 +71,11 @@ export class LastfmService {
         registered: lastfmUser.registered.unixtime,
         user: lastfmUser.name,
         name: lastfmUser.realname,
-        image: lastfmUser.image[3]['#text'],
+        image: lastfmUser.image[3]['#text']
       }
 
       this.cacheService.set(key, usr, {
-        ttl: 60 * 60,
+        ttl: 60 * 60
       })
 
       return usr
@@ -96,26 +92,86 @@ export class LastfmService {
   public async getAlbumsChart(
     user: string,
     period: PeriodResolvable,
-    limit?: number,
+    limit?: number
   ) {
     if (Array.isArray(period)) {
       // Custom period
-      period
+      return {
+        fromWeekly: true,
+        items: []
+      }
     } else {
       const { topalbums } = await this.request('user.getTopAlbums', {
         user,
         period: period.toLowerCase(),
-        limit,
+        limit
       })
 
       return {
-        fromWeekly: true,
+        fromWeekly: false,
         items: topalbums.album.slice(0, limit).map((album) => ({
           name: album.name,
           artist: album.artist.name,
           playCount: parseInt(album.playcount),
-          image: LastfmService.parseImage(album.image, defaultAlbumImage),
-        })),
+          image: LastfmService.parseImage(album.image, defaultAlbumImage)
+        }))
+      }
+    }
+  }
+
+  public async getArtistsChart(
+    user: string,
+    period: PeriodResolvable,
+    limit?: number
+  ) {
+    if (Array.isArray(period)) {
+      // Custom period
+      return {
+        fromWeekly: true,
+        items: []
+      }
+    } else {
+      const { topartists } = await this.request('user.getTopArtists', {
+        user,
+        period: period.toLowerCase(),
+        limit
+      })
+
+      return {
+        fromWeekly: false,
+        items: topartists.artist.slice(0, limit).map((artist) => ({
+          name: artist.name,
+          playCount: parseInt(artist.playcount)
+        })) as { name: string; playCount: number }[]
+      }
+    }
+  }
+
+  public async getTracksChart(
+    user: string,
+    period: PeriodResolvable,
+    limit?: number
+  ) {
+    if (Array.isArray(period)) {
+      // Custom period
+      return {
+        fromWeekly: true,
+        items: []
+      }
+    } else {
+      const { toptracks } = await this.request('user.getTopTracks', {
+        user,
+        period: period.toLowerCase(),
+        limit
+      })
+
+      return {
+        fromWeekly: false,
+        items: toptracks.track.slice(0, limit).map((track) => ({
+          name: track.name,
+          artist: track.artist.name,
+          playCount: parseInt(track.playcount)
+        })) as { name: string; artist: string; playCount: number }[]
       }
     }
   }

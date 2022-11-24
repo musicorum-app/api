@@ -25,7 +25,9 @@ export class WorkersService {
         url = url.slice(0, -1)
       }
 
-      this.handleUrl(url)
+      const worker = new Worker(url)
+      this.workers.add(worker)
+      this.handleUrl(worker)
     }
   }
 
@@ -38,25 +40,22 @@ export class WorkersService {
     return null
   }
 
-  private async handleUrl(url: string, tries = 0) {
-    const worker = new Worker(url)
-    this.workers.add(worker)
-
+  private async handleUrl(worker: Worker, tries = 0) {
     worker
       .setup()
       .then(() => {
         this.logger.log(
-          `New worker '${worker.name}' registered at ${worker.url} using '${worker.engine}' ${worker.version}`,
+          `New worker '${worker.name}' registered at ${worker.url} using '${worker.engine}' ${worker.version}`
         )
       })
       .catch((err) => {
         this.logger.warn(
-          `Could not connect to worker at ${url}: '${err}'. Retrying (${tries}/${this.maxTries})...`,
+          `Could not connect to worker at ${worker.url}: '${err}'. Retrying (${tries}/${this.maxTries})...`
         )
 
         if (tries < this.maxTries) {
           setTimeout(() => {
-            this.handleUrl(url, ++tries)
+            this.handleUrl(worker, ++tries)
           }, 5000)
         }
       })

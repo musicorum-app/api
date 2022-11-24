@@ -28,7 +28,7 @@ export class ValidationService {
   private createGenerateJoi() {
     const themeOptionsJoi = (
       value: Record<string, any>,
-      helpers: Joi.CustomHelpers,
+      helpers: Joi.CustomHelpers
     ) => {
       const { theme } = helpers.state.ancestors[0]
       Joi.assert(value, this.themesJoi[theme])
@@ -49,7 +49,7 @@ export class ValidationService {
 
       hide_username: Joi.bool().required(),
 
-      options: Joi.object().custom(themeOptionsJoi),
+      options: Joi.object().custom(themeOptionsJoi)
     })
   }
 }

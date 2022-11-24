@@ -7,13 +7,15 @@ import { LastfmService } from '../api/lastfm/lastfm.service'
 import { WorkersService } from '../workers/workers.service'
 import { CollageRequest } from './collages.interface'
 import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry'
-import { Transaction } from '@sentry/types'
 import * as Sentry from '@sentry/node'
+import { Nullable } from '../resources/resources.type'
+import { LastfmUserInfo } from '../api/lastfm/lastfm.types'
+import { Transaction } from '@sentry/types'
 
 @Injectable()
 export class CollagesService {
   private themesInstances = {
-    grid: this.gridTheme,
+    grid: this.gridTheme
   }
 
   constructor(
@@ -21,7 +23,7 @@ export class CollagesService {
     private lastfmService: LastfmService,
     private prismaService: PrismaService,
     @InjectSentry() private readonly sentry: SentryService,
-    private gridTheme: GridTheme,
+    private gridTheme: GridTheme
   ) {}
 
   async generateCollage(data: CollageRequest, appId?: string) {
@@ -30,46 +32,56 @@ export class CollagesService {
     if (!worker)
       throw new HttpException(
         'No available worker for that theme',
-        HttpStatus.SERVICE_UNAVAILABLE,
+        HttpStatus.SERVICE_UNAVAILABLE
       )
 
     const theme = this.themesInstances[data.theme]
     const id = nanoid(24)
 
-    const transaction = await new Promise<Transaction>((resolve) => {
-      this.sentry.instance().configureScope((scope) => {
-        scope.setTransactionName(`Collage generation > ${data.theme}`)
-        resolve(scope.getTransaction())
-      })
-    })
+    const transaction = await new Promise<Transaction | undefined>(
+      (resolve) => {
+        this.sentry.instance().configureScope((scope) => {
+          scope.setTransactionName(`Collage generation > ${data.theme}`)
+          scope.getTransaction()?.setName(`Collage generation > ${data.theme}`)
+          resolve(scope.getTransaction())
+        })
+      }
+    )
+
+    // const transaction = this.sentry
+    //   .instance()
+    //   .getCurrentHub()
+    //   .getScope()
+    //   ?.getTransaction()
 
     this.sentry.instance().setContext('Image generation', {
       id,
       theme: data.theme,
       worker: worker.name,
-      worker_version: worker.version,
+      worker_version: worker.version
     })
 
     try {
       this.sentry.instance().addBreadcrumb({
         category: 'generation.worker.data',
         level: Sentry.Severity.Info,
-        message: 'Handling worker data',
+        message: 'Handling worker data'
       })
       const workerData = await theme.handleDate(data)
+
       this.sentry.instance().addBreadcrumb({
         category: 'generation.worker.data',
         level: Sentry.Severity.Info,
-        message: 'Worker data handled',
+        message: 'Worker data handled'
       })
 
-      let user = null
+      let user: Nullable<LastfmUserInfo> = null
       if (theme.requiresUserData) {
         user = await this.lastfmService.userGetInfo(data.user)
         this.sentry.instance().addBreadcrumb({
           category: 'generation.worker.user',
           level: Sentry.Severity.Info,
-          message: 'Getting user information from ' + data.user,
+          message: 'Getting user information from ' + data.user
         })
         if (!user)
           throw new HttpException('User not found', HttpStatus.BAD_REQUEST)
@@ -78,7 +90,7 @@ export class CollagesService {
       this.sentry.instance().addBreadcrumb({
         category: 'generation.worker.generate',
         level: Sentry.Severity.Info,
-        message: 'Starting generation',
+        message: 'Starting generation'
       })
 
       const result = await worker.generate(
@@ -88,15 +100,15 @@ export class CollagesService {
           theme: data.theme,
           story: data.story,
           hide_username: data.hide_username,
-          data: workerData,
+          data: workerData
         },
-        transaction.traceId,
+        transaction?.traceId
       )
 
       this.sentry.instance().addBreadcrumb({
         category: 'generation.worker.generate',
         level: Sentry.Severity.Info,
-        message: 'Generation done',
+        message: 'Generation done'
       })
 
       await this.prismaService.collage.create({
@@ -107,15 +119,15 @@ export class CollagesService {
           theme: data.theme,
           file: result.file,
           render_duration: result.duration,
-          total_duration: performance.now() - start,
-        },
+          total_duration: performance.now() - start
+        }
       })
 
       return {
-        id,
         ...result,
+        id,
         url: process.env.RESULT_URL + result.file,
-        trace_id: transaction.traceId,
+        trace_id: transaction?.traceId
       }
     } catch (error) {
       console.error(error)
