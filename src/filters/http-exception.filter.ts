@@ -4,7 +4,7 @@ import {
   ExceptionFilter,
   HttpException,
   Injectable,
-  Logger,
+  Logger
 } from '@nestjs/common'
 import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry'
 import { Response } from 'express'
@@ -31,7 +31,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       status: 500,
       error: 'Internal error',
       message: 'Internal error',
-      event_id: eventId,
+      event_id: eventId
     })
   }
 
@@ -48,7 +48,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
           ? exceptionResponse
           : 'Internal error',
       message: exceptionResponse.message || undefined,
-      ...(typeof exceptionResponse === 'object' ? exceptionResponse : {}),
+      ...(typeof exceptionResponse === 'object' ? exceptionResponse : {})
     })
   }
 }

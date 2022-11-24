@@ -7,7 +7,7 @@ import { PrismaService } from 'src/database/prisma.service'
 export class ApplicationService {
   constructor(
     private prisma: PrismaService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   async getByKey(key: string): Promise<Application | null> {
@@ -16,8 +16,8 @@ export class ApplicationService {
 
     const app = await this.prisma.application.findUnique({
       where: {
-        key,
-      },
+        key
+      }
     })
 
     if (app && app.id) this.cacheManager.set(`app:by_key:${key}`, app)

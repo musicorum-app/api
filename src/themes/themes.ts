@@ -1,7 +1,7 @@
 import { GridTheme } from './themes/grid.theme'
 
 export const themes = {
-  grid: GridTheme,
+  grid: GridTheme
 } as const
 
 export const availableThemes = Object.keys(themes)

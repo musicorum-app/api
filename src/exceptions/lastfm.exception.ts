@@ -7,7 +7,7 @@ export class LastfmException extends HttpException {
   constructor({ error, message }: { message: string; error: number }) {
     super(
       `There was a problem comunicating with Last.fm (error ${error})`,
-      HttpStatus.SERVICE_UNAVAILABLE,
+      HttpStatus.SERVICE_UNAVAILABLE
     )
     this.message = message
     this.error = error

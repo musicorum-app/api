@@ -5,5 +5,5 @@ export const RequestApplication = createParamDecorator(
   (_: unknown, context: ExecutionContext) => {
     const req = context.switchToHttp().getRequest() as RequestWithApplication
     return req.application
-  },
+  }
 )
