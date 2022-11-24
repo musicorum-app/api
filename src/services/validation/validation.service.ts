@@ -2,16 +2,22 @@ import { Injectable } from '@nestjs/common'
 import * as Joi from 'joi'
 import { ValidationException } from 'src/exceptions/validation.exception'
 import { CollageRequest } from 'src/services/collages/collages.interface'
+import { Theme } from 'src/themes/theme.interface'
 import { availableThemes, ThemeType } from 'src/themes/themes'
+import { DuotoneTheme } from 'src/themes/themes/duotone.theme'
 import { GridTheme } from 'src/themes/themes/grid.theme'
 
 @Injectable()
 export class ValidationService {
-  private themes = [this.gridTheme]
+  private themes: Theme[]
   private themesJoi = {} as Record<ThemeType, Joi.ObjectSchema>
   private generateJoi = this.createGenerateJoi()
 
-  constructor(private gridTheme: GridTheme) {
+  constructor(
+    private gridTheme: GridTheme,
+    private duotoneTheme: DuotoneTheme
+  ) {
+    this.themes = [this.gridTheme, this.duotoneTheme]
     for (const theme of this.themes) {
       this.themesJoi[theme.name] = theme.createValidationSchema()
     }

@@ -1,16 +1,28 @@
 import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common'
 import axios from 'axios'
 import { Cache } from 'cache-manager'
-import { defaultAlbumImage, PeriodResolvable } from 'src/constants'
+import { defaultAlbumImage, Period, PeriodResolvable } from 'src/constants'
 import { LastfmException } from 'src/exceptions/lastfm.exception'
-import { LastfmImages, LastfmUserInfo } from './lastfm.types'
+import { LastfmAlbumChart, LastfmImages, LastfmUserInfo } from './lastfm.types'
+import LastClient from '@musicorum/lastfm'
+
+const periods = {
+  '7DAY': 604800000,
+  '1MONTH': 2592000000,
+  '3MONTH': 7776000000,
+  '6MONTH': 15552000000,
+  '12MONTH': 31536000000
+} as const
 
 @Injectable()
 export class LastfmService {
   private logger = new Logger(LastfmService.name)
+  private client: LastClient
 
   constructor(@Inject(CACHE_MANAGER) private cacheService: Cache) {
-    if (!process.env.LASTFM_KEY) {
+    if (process.env.LASTFM_KEY) {
+      this.client = new LastClient(process.env.LASTFM_KEY)
+    } else {
       this.logger.error(`'LASTFM_KEY' environment variable not present.`)
     }
   }
@@ -52,7 +64,9 @@ export class LastfmService {
   ): Promise<null | Record<string, any>> {
     if (bypassCache) return null
     const cached = await this.cacheService.get(key)
-    return cached && typeof cached === 'object' && cached !== {} ? cached : null
+    return cached && typeof cached === 'object' && Object.keys(cached).length
+      ? cached
+      : null
   }
 
   public async userGetInfo(
@@ -114,7 +128,7 @@ export class LastfmService {
           artist: album.artist.name,
           playCount: parseInt(album.playcount),
           image: LastfmService.parseImage(album.image, defaultAlbumImage)
-        }))
+        })) as LastfmAlbumChart[]
       }
     }
   }
@@ -174,6 +188,32 @@ export class LastfmService {
         })) as { name: string; artist: string; playCount: number }[]
       }
     }
+  }
+
+  public async getScrobbleCount(user: string, period: PeriodResolvable) {
+    if (period === Period.OVERALL) {
+      const playCount = await this.userGetInfo(user).then((r) => r?.playCount)
+      return playCount || 0
+    }
+
+    let from: Date
+    let to: Date
+
+    if (Array.isArray(period)) {
+      from = new Date(period[0])
+      to = new Date(period[1])
+    } else {
+      const now = new Date()
+      from = new Date(now.getTime() - periods[period])
+      to = now
+    }
+
+    const recentTracks = await this.client.user.getRecentTracks(user, {
+      limit: 1,
+      from,
+      to
+    })
+    return recentTracks.attr.total
   }
 
   static parseImage(images: LastfmImages, defaultImage: string) {

@@ -1,0 +1,8 @@
+name: Procyon
+media_path: /home/media/
+export_path: /home/export/
+
+themes:
+  - duotone
+  - tops
+  - darkly

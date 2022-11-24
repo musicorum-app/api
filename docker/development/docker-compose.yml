@@ -10,6 +10,14 @@ services:
       - ./gorfe.yaml:/go/app/bin/config.yaml
     environment:
       SENTRY_DSN: $SENTRY_DSN
+  procyon:
+    image: musicorum/luyten:main
+    ports:
+      - 9815:9815
+    volumes:
+      - /share/export:/home/export
+      - /share/media:/home/media
+      - ./luyten.yaml:/usr/src/app/config.yaml
   database:
     image: postgres:13
     environment:

@@ -11,20 +11,27 @@ import * as Sentry from '@sentry/node'
 import { Nullable } from '../resources/resources.type'
 import { LastfmUserInfo } from '../api/lastfm/lastfm.types'
 import { Transaction } from '@sentry/types'
+import { DuotoneTheme } from 'src/themes/themes/duotone.theme'
+import { themes } from 'src/themes/themes'
+import { Theme } from 'src/themes/theme.interface'
 
 @Injectable()
 export class CollagesService {
-  private themesInstances = {
-    grid: this.gridTheme
-  }
+  private themesInstances: Record<keyof typeof themes, Theme>
 
   constructor(
     private workersService: WorkersService,
     private lastfmService: LastfmService,
     private prismaService: PrismaService,
     @InjectSentry() private readonly sentry: SentryService,
-    private gridTheme: GridTheme
-  ) {}
+    private gridTheme: GridTheme,
+    private duotoneTheme: DuotoneTheme
+  ) {
+    this.themesInstances = {
+      grid: this.gridTheme,
+      duotone: this.duotoneTheme
+    }
+  }
 
   async generateCollage(data: CollageRequest, appId?: string) {
     const start = performance.now()
@@ -67,6 +74,7 @@ export class CollagesService {
         level: Sentry.Severity.Info,
         message: 'Handling worker data'
       })
+
       const workerData = await theme.handleDate(data)
 
       this.sentry.instance().addBreadcrumb({

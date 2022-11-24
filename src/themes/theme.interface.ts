@@ -1,5 +1,5 @@
 import { CollageRequest } from 'src/services/collages/collages.interface'
-import { Entity, Period, PeriodResolvable } from 'src/constants'
+import { Entity, PeriodResolvable } from 'src/constants'
 import Joi from 'joi'
 import { ThemeType } from './themes'
 
@@ -21,6 +21,12 @@ export interface IGridTheme {
   style: 'DEFAULT' | 'CAPTION' | 'SHADOW'
 }
 
+export interface IDuotoneTheme {
+  period: PeriodResolvable
+  entity: Entity
+  palette: string
+}
+
 export interface IWorkerGenerationData {
   id: string
   user: {
@@ -34,4 +40,4 @@ export interface IWorkerGenerationData {
   data: Record<string, any>
 }
 
-export type ThemeOptions = IGridTheme
+export type ThemeOptions = IGridTheme | IDuotoneTheme
