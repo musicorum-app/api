@@ -1,13 +1,13 @@
 import { Body, Controller, Post, Query, UseGuards } from '@nestjs/common'
-import { ApiKeyGuard } from 'src/guards/api-key.guard'
+import { ApiKeyGuard } from 'src/guards/api-key.guard.js'
 import {
   albumResourcesPayloadJoi,
   artistResourcesPayloadJoi,
   trackResourcesPayloadJoi
-} from '../validation/resources.joi'
-import { ValidationException } from 'src/exceptions/validation.exception'
-import { ResourcesService } from './resources.service'
-import { AlbumRequestItem, TrackRequestItem } from './resources.type'
+} from '../validation/resources.joi.js'
+import { ValidationException } from 'src/exceptions/validation.exception.js'
+import { ResourcesService } from './resources.service.js'
+import { AlbumRequestItem, TrackRequestItem } from './resources.type.js'
 
 @Controller({
   path: 'resources',

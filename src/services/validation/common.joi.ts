@@ -1,4 +1,4 @@
-import { Entity, Period } from '../../constants'
+import { Entity, Period } from '../../constants.js'
 import * as Joi from 'joi'
 
 export const entitiesResolverJoi = Joi.string()

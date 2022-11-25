@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import * as Joi from 'joi'
-import { ValidationException } from 'src/exceptions/validation.exception'
-import { CollageRequest } from 'src/services/collages/collages.interface'
-import { Theme } from 'src/themes/theme.interface'
-import { availableThemes, ThemeType } from 'src/themes/themes'
-import { DuotoneTheme } from 'src/themes/themes/duotone.theme'
-import { GridTheme } from 'src/themes/themes/grid.theme'
+import { ValidationException } from 'src/exceptions/validation.exception.js'
+import { CollageRequest } from 'src/services/collages/collages.interface.js'
+import { Theme } from 'src/themes/theme.interface.js'
+import { availableThemes, ThemeType } from 'src/themes/themes.js'
+import { DuotoneTheme } from 'src/themes/themes/duotone.theme.js'
+import { GridTheme } from 'src/themes/themes/grid.theme.js'
 
 @Injectable()
 export class ValidationService {

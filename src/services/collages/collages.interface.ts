@@ -1,5 +1,5 @@
-import { ThemeOptions } from 'src/themes/theme.interface'
-import { ThemeType } from 'src/themes/themes'
+import { ThemeOptions } from 'src/themes/theme.interface.js'
+import { ThemeType } from 'src/themes/themes.js'
 
 export interface CollageRequest<TO = ThemeOptions> {
   user: string
