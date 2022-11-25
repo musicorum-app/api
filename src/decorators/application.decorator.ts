@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common'
-import { RequestWithApplication } from 'src/types/common'
+import { RequestWithApplication } from 'src/types/common.js'
 
 export const RequestApplication = createParamDecorator(
   (_: unknown, context: ExecutionContext) => {

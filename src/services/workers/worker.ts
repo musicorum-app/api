@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { WorkerGenerationResponse } from 'src/types/common'
+import { WorkerGenerationResponse } from 'src/types/common.js'
 
 export class Worker {
   public name: string
@@ -12,7 +12,7 @@ export class Worker {
   constructor(public url: string) {}
 
   async setup() {
-    const { data } = await axios.get(`${this.url}/metadata`)
+    const { data } = await axios.default.get(`${this.url}/metadata`)
 
     if (
       !data.name ||
@@ -33,7 +33,7 @@ export class Worker {
   }
 
   async generate(data: Record<string, any>, traceId?: string) {
-    return axios
+    return axios.default
       .post<WorkerGenerationResponse>(`${this.url}/generate`, data, {
         headers: {
           'sentry-trace': traceId || ''

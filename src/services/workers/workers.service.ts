@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { ThemeType } from 'src/themes/themes'
-import { Worker } from './worker'
+import { ThemeType } from 'src/themes/themes.js'
+import { Worker } from './worker.js'
 
 @Injectable()
 export class WorkersService {

@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards } from '@nestjs/common'
-import { ApiKeyGuard } from 'src/guards/api-key.guard'
-import { Worker } from './worker'
-import { WorkersService } from './workers.service'
+import { ApiKeyGuard } from 'src/guards/api-key.guard.js'
+import { Worker } from './worker.js'
+import { WorkersService } from './workers.service.js'
 
 @Controller('workers')
 export class WorkersController {

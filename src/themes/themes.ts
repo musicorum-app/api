@@ -1,5 +1,5 @@
-import { DuotoneTheme } from './themes/duotone.theme'
-import { GridTheme } from './themes/grid.theme'
+import { DuotoneTheme } from './themes/duotone.theme.js'
+import { GridTheme } from './themes/grid.theme.js'
 
 export const themes = {
   grid: GridTheme,

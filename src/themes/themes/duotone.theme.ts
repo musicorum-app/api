@@ -2,23 +2,23 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry'
 import Joi from 'joi'
-import { Entity, Period } from 'src/constants'
-import { LastfmService } from 'src/services/api/lastfm/lastfm.service'
-import { CollageRequest } from 'src/services/collages/collages.interface'
+import { Entity, Period } from 'src/constants.js'
+import { LastfmService } from 'src/services/api/lastfm/lastfm.service.js'
+import { CollageRequest } from 'src/services/collages/collages.interface.js'
 import {
   getPrefferedImageResource,
   ResourcesService
-} from 'src/services/resources/resources.service'
+} from 'src/services/resources/resources.service.js'
 import {
   IHaveImageResources,
   ImageSize,
   Nullable
-} from 'src/services/resources/resources.type'
+} from 'src/services/resources/resources.type.js'
 import {
   entitiesResolverJoi,
   periodResolverJoi
-} from 'src/services/validation/common.joi'
-import { IDuotoneTheme, Theme } from '../theme.interface'
+} from 'src/services/validation/common.joi.js'
+import { IDuotoneTheme, Theme } from '../theme.interface.js'
 
 type Palette = [string, string]
 
