@@ -4,7 +4,7 @@ export enum Period {
   THREE_MONTHS = '3MONTH',
   SIX_MONTHS = '6MONTH',
   TWELVE_MONTHS = '12MONTH',
-  OVERALL = 'OVERALL',
+  OVERALL = 'OVERALL'
 }
 
 export type PeriodResolvable = Period | [number, number]
@@ -12,7 +12,7 @@ export type PeriodResolvable = Period | [number, number]
 export enum Entity {
   ARTIST = 'ARTIST',
   ALBUM = 'ALBUM',
-  TRACK = 'TRACK',
+  TRACK = 'TRACK'
 }
 
 export const defaultArtistImage =

@@ -19,7 +19,7 @@ import {
   Nullable
 } from 'src/services/resources/resources.type'
 import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry'
-import { Severity } from '@sentry/node'
+import * as Sentry from '@sentry/node'
 
 interface ITile {
   image: string
@@ -127,7 +127,7 @@ export class GridTheme implements Theme {
   private startResourcesSentry(entity: Entity) {
     this.sentryService.instance().addBreadcrumb({
       category: 'generation.resources',
-      level: Severity.Info,
+      level: Sentry.Severity.Info,
       message: 'Starting resoures',
       data: {
         entity
@@ -137,7 +137,7 @@ export class GridTheme implements Theme {
     return () => {
       this.sentryService.instance().addBreadcrumb({
         category: 'generation.resources',
-        level: Severity.Info,
+        level: Sentry.Severity.Info,
         message: 'Ended resoures'
       })
     }

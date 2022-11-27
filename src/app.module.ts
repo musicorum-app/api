@@ -15,7 +15,6 @@ import { ApplicationService } from './services/application/application.service'
 import { SentryModule, SentryService } from '@ntegral/nestjs-sentry'
 import { APP_FILTER, HttpAdapterHost } from '@nestjs/core'
 import { HttpExceptionFilter } from './filters/http-exception.filter'
-import type { RedisClientOptions, RedisScripts } from 'redis'
 import { CollagesController } from './services/collages/collages.controller'
 import * as redisStore from 'cache-manager-redis-store'
 import { themes } from './themes/themes'
@@ -49,7 +48,7 @@ console.log(process.env.NODE_ENV)
         debug: process.env.NODE_ENV !== 'production'
       })
     }),
-    CacheModule.register<RedisClientOptions<never, RedisScripts>>({
+    CacheModule.register({
       store: redisStore,
       url: process.env.REDIS_URL,
       ttl: 60 * 60 // 1 hour

@@ -36,3 +36,6 @@ lerna-debug.log*
 
 # Secret stuff
 .env
+
+docker/development/data
+docker/development/share

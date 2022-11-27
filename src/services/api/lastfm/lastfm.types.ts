@@ -23,3 +23,10 @@ export interface LastfmTopAlbumsResponse {
     }[]
   }
 }
+
+export interface LastfmAlbumChart {
+  name: string
+  artist: string
+  playCount: number
+  image: string
+}

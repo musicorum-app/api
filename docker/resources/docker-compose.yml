@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_PASSWORD: pass
     volumes:
-     - db:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
   manager:
     image: musicorum/resource-manager:latest
     environment:
@@ -18,7 +18,7 @@ services:
       SPOTIFY_ID: '${SPOTIFY_ID}'
       SPOTIFY_SECRET: '${SPOTIFY_SECRET}'
     ports:
-    - 4040:4040
+      - 4040:4040
   redis:
     image: redis:latest
 volumes:

@@ -1,9 +1,17 @@
 import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common'
 import axios from 'axios'
 import { Cache } from 'cache-manager'
-import { defaultAlbumImage, PeriodResolvable } from 'src/constants'
+import { defaultAlbumImage, Period, PeriodResolvable } from 'src/constants'
 import { LastfmException } from 'src/exceptions/lastfm.exception'
-import { LastfmImages, LastfmUserInfo } from './lastfm.types'
+import { LastfmAlbumChart, LastfmImages, LastfmUserInfo } from './lastfm.types'
+
+const periods = {
+  '7DAY': 604800,
+  '1MONTH': 2592000,
+  '3MONTH': 7776000,
+  '6MONTH': 15552000,
+  '12MONTH': 31536000
+} as const
 
 @Injectable()
 export class LastfmService {
@@ -52,7 +60,9 @@ export class LastfmService {
   ): Promise<null | Record<string, any>> {
     if (bypassCache) return null
     const cached = await this.cacheService.get(key)
-    return cached && typeof cached === 'object' && cached !== {} ? cached : null
+    return cached && typeof cached === 'object' && Object.keys(cached).length
+      ? cached
+      : null
   }
 
   public async userGetInfo(
@@ -114,7 +124,7 @@ export class LastfmService {
           artist: album.artist.name,
           playCount: parseInt(album.playcount),
           image: LastfmService.parseImage(album.image, defaultAlbumImage)
-        }))
+        })) as LastfmAlbumChart[]
       }
     }
   }
@@ -174,6 +184,41 @@ export class LastfmService {
         })) as { name: string; artist: string; playCount: number }[]
       }
     }
+  }
+
+  public async getScrobbleCount(user: string, period: PeriodResolvable) {
+    if (period === Period.OVERALL) {
+      const playCount = await this.userGetInfo(user).then((r) => r?.playCount)
+      return playCount || 0
+    }
+
+    let from: number
+    let to: number
+
+    if (Array.isArray(period)) {
+      from = period[0] * 1000
+      to = period[1] * 1000
+    } else {
+      const now = new Date().getTime()
+      from = now - periods[period]
+      to = now
+    }
+
+    const { recenttracks } = await this.request('user.getRecentTracks', {
+      user,
+      limit: 2,
+      from,
+      to
+    })
+
+    // const recentTracks = await this.client.user.getRecentTracks(user, {
+    //   limit: 1,
+    //   from,
+    //   to
+    // })
+    // return recentTracks.attr.total
+
+    return recenttracks['@attr'].total
   }
 
   static parseImage(images: LastfmImages, defaultImage: string) {

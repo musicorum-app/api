@@ -1,7 +1,8 @@
-port: 2037
-name: Bolina
+name: Procyon
 media_path: /home/media/
 export_path: /home/export/
 
-grid:
-  quality: 78
+themes:
+  - duotone
+  - tops
+  - darkly
