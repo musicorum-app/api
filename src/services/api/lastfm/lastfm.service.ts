@@ -6,11 +6,11 @@ import { LastfmException } from 'src/exceptions/lastfm.exception'
 import { LastfmAlbumChart, LastfmImages, LastfmUserInfo } from './lastfm.types'
 
 const periods = {
-  '7DAY': 604800,
-  '1MONTH': 2592000,
-  '3MONTH': 7776000,
-  '6MONTH': 15552000,
-  '12MONTH': 31536000
+  '7DAY': 604800000,
+  '1MONTH': 2592000000,
+  '3MONTH': 7776000000,
+  '6MONTH': 15552000000,
+  '12MONTH': 31536000000
 } as const
 
 @Injectable()
@@ -204,11 +204,14 @@ export class LastfmService {
       to = now
     }
 
+    from /= 1000
+    to /= 1000
+
     const { recenttracks } = await this.request('user.getRecentTracks', {
       user,
       limit: 2,
-      from,
-      to
+      from: Math.round(from),
+      to: Math.round(to)
     })
 
     // const recentTracks = await this.client.user.getRecentTracks(user, {
