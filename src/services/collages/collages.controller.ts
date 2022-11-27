@@ -1,8 +1,8 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common'
-import { RequestApplication } from 'src/decorators/application.decorator.js'
-import { ApiKeyGuard } from 'src/guards/api-key.guard.js'
-import { ValidationService } from 'src/services/validation/validation.service.js'
-import { CollagesService } from './collages.service.js'
+import { RequestApplication } from 'src/decorators/application.decorator'
+import { ApiKeyGuard } from 'src/guards/api-key.guard'
+import { ValidationService } from 'src/services/validation/validation.service'
+import { CollagesService } from './collages.service'
 
 @Controller('collages')
 export class CollagesController {

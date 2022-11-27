@@ -1,9 +1,9 @@
 import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common'
 import axios from 'axios'
 import { Cache } from 'cache-manager'
-import { defaultAlbumImage, Period, PeriodResolvable } from 'src/constants.js'
-import { LastfmException } from 'src/exceptions/lastfm.exception.js'
-import { LastfmAlbumChart, LastfmImages, LastfmUserInfo } from './lastfm.types.js'
+import { defaultAlbumImage, Period, PeriodResolvable } from 'src/constants'
+import { LastfmException } from 'src/exceptions/lastfm.exception'
+import { LastfmAlbumChart, LastfmImages, LastfmUserInfo } from './lastfm.types'
 import LastClient from '@musicorum/lastfm'
 
 const periods = {
@@ -33,7 +33,7 @@ export class LastfmService {
   ): Promise<D> {
     this.logger.verbose(`Doing request on last.fm for method '${method}'`)
     try {
-      const res = await axios.default.get('http://ws.audioscrobbler.com/2.0/', {
+      const res = await axios.get('http://ws.audioscrobbler.com/2.0/', {
         params: {
           method,
           format: 'json',

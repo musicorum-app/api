@@ -1,6 +1,6 @@
 import { Logger, VersioningType } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { MusicorumModule } from './app.module.js'
+import { MusicorumModule } from './app.module'
 
 async function main() {
   const logger = new Logger('MusicorumApi')

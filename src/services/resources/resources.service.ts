@@ -10,7 +10,7 @@ import {
   ResourceFinderParams,
   TrackRequestItem,
   TrackResource
-} from './resources.type.js'
+} from './resources.type'
 
 @Injectable()
 export class ResourcesService {
@@ -21,7 +21,7 @@ export class ResourcesService {
     if (!process.env.RESOURCES_URL) {
       this.logger.error(`'RESOURCES_URL' environment variable not present.`)
     }
-    this.instance = axios.default.create({
+    this.instance = axios.create({
       baseURL: process.env.RESOURCES_URL
     })
   }

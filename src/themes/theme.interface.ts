@@ -1,7 +1,7 @@
-import { CollageRequest } from 'src/services/collages/collages.interface.js'
-import { Entity, PeriodResolvable } from 'src/constants.js'
+import { CollageRequest } from 'src/services/collages/collages.interface'
+import { Entity, PeriodResolvable } from 'src/constants'
 import Joi from 'joi'
-import { ThemeType } from './themes.js'
+import { ThemeType } from './themes'
 
 export interface Theme {
   name: string

@@ -1,5 +1,5 @@
-import { getPrefferedImageResource } from './resources.service.js'
-import { ImageResourceSource, ImageSize } from './resources.type.js'
+import { getPrefferedImageResource } from './resources.service'
+import { ImageResourceSource, ImageSize } from './resources.type'
 
 describe('ResourcesService', () => {
   it('should resolve the preffered resource', () => {

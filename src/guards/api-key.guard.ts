@@ -5,8 +5,8 @@ import {
   UnauthorizedException
 } from '@nestjs/common'
 import { SentryService } from '@ntegral/nestjs-sentry'
-import { ApplicationService } from 'src/services/application/application.service.js'
-import { RequestWithApplication } from 'src/types/common.js'
+import { ApplicationService } from 'src/services/application/application.service'
+import { RequestWithApplication } from 'src/types/common'
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {

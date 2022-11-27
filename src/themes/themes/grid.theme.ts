@@ -3,21 +3,21 @@ import * as Joi from 'joi'
 import {
   entitiesResolverJoi,
   periodResolverJoi
-} from 'src/services/validation/common.joi.js'
-import { CollageRequest } from 'src/services/collages/collages.interface.js'
-import { IGridTheme, Theme } from '../theme.interface.js'
+} from 'src/services/validation/common.joi'
+import { CollageRequest } from 'src/services/collages/collages.interface'
+import { IGridTheme, Theme } from '../theme.interface'
 import {
   getPrefferedImageResource,
   ResourcesService
-} from '../../services/resources/resources.service.js'
-import { LastfmService } from 'src/services/api/lastfm/lastfm.service.js'
+} from '../../services/resources/resources.service'
+import { LastfmService } from 'src/services/api/lastfm/lastfm.service'
 import { ConfigService } from '@nestjs/config'
-import { Entity } from 'src/constants.js'
+import { Entity } from 'src/constants'
 import {
   IHaveImageResources,
   ImageSize,
   Nullable
-} from 'src/services/resources/resources.type.js'
+} from 'src/services/resources/resources.type'
 import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry'
 import * as Sentry from '@sentry/node'
 
