@@ -47,6 +47,9 @@ export class CollagesService {
 
     const transaction = await new Promise<Transaction | undefined>(
       (resolve) => {
+        if (process.env.NODE_ENV === 'development') {
+          resolve(undefined)
+        }
         this.sentry.instance().configureScope((scope) => {
           scope.setTransactionName(`Collage generation > ${data.theme}`)
           scope.getTransaction()?.setName(`Collage generation > ${data.theme}`)
@@ -131,11 +134,16 @@ export class CollagesService {
         }
       })
 
-      return {
-        ...result,
-        id,
-        url: process.env.RESULT_URL + result.file,
-        trace_id: transaction?.traceId
+      if (result.file) {
+        return {
+          ...result,
+          id,
+          url: process.env.RESULT_URL + result.file,
+          trace_id: transaction?.traceId
+        }
+      } else {
+        console.warn(result)
+        throw new Error('Error while rendering')
       }
     } catch (error) {
       console.error(error)

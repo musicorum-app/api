@@ -4,25 +4,21 @@ import { Cache } from 'cache-manager'
 import { defaultAlbumImage, Period, PeriodResolvable } from 'src/constants'
 import { LastfmException } from 'src/exceptions/lastfm.exception'
 import { LastfmAlbumChart, LastfmImages, LastfmUserInfo } from './lastfm.types'
-import LastClient from '@musicorum/lastfm'
 
 const periods = {
-  '7DAY': 604800000,
-  '1MONTH': 2592000000,
-  '3MONTH': 7776000000,
-  '6MONTH': 15552000000,
-  '12MONTH': 31536000000
+  '7DAY': 604800,
+  '1MONTH': 2592000,
+  '3MONTH': 7776000,
+  '6MONTH': 15552000,
+  '12MONTH': 31536000
 } as const
 
 @Injectable()
 export class LastfmService {
   private logger = new Logger(LastfmService.name)
-  private client: LastClient
 
   constructor(@Inject(CACHE_MANAGER) private cacheService: Cache) {
-    if (process.env.LASTFM_KEY) {
-      this.client = new LastClient(process.env.LASTFM_KEY)
-    } else {
+    if (!process.env.LASTFM_KEY) {
       this.logger.error(`'LASTFM_KEY' environment variable not present.`)
     }
   }
@@ -196,24 +192,33 @@ export class LastfmService {
       return playCount || 0
     }
 
-    let from: Date
-    let to: Date
+    let from: number
+    let to: number
 
     if (Array.isArray(period)) {
-      from = new Date(period[0])
-      to = new Date(period[1])
+      from = period[0] * 1000
+      to = period[1] * 1000
     } else {
-      const now = new Date()
-      from = new Date(now.getTime() - periods[period])
+      const now = new Date().getTime()
+      from = now - periods[period]
       to = now
     }
 
-    const recentTracks = await this.client.user.getRecentTracks(user, {
-      limit: 1,
+    const { recenttracks } = await this.request('user.getRecentTracks', {
+      user,
+      limit: 2,
       from,
       to
     })
-    return recentTracks.attr.total
+
+    // const recentTracks = await this.client.user.getRecentTracks(user, {
+    //   limit: 1,
+    //   from,
+    //   to
+    // })
+    // return recentTracks.attr.total
+
+    return recenttracks['@attr'].total
   }
 
   static parseImage(images: LastfmImages, defaultImage: string) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry'
-import Joi from 'joi'
+import * as Joi from 'joi'
 import { Entity, Period } from 'src/constants'
 import { LastfmService } from 'src/services/api/lastfm/lastfm.service'
 import { CollageRequest } from 'src/services/collages/collages.interface'
@@ -29,13 +29,14 @@ interface DuotoneWorkerData {
     secondary?: string
   }[]
   title: string
-  palette: string
+  subtitle: string
+  palette: [string, string]
 }
 
 @Injectable()
 export class DuotoneTheme implements Theme {
   public name = 'duotone'
-  public requiresUserData = false
+  public requiresUserData = true
   private palettes: Record<string, Palette>
 
   constructor(
@@ -74,7 +75,7 @@ export class DuotoneTheme implements Theme {
       items = chart.items.map((album) => ({
         name: album.name,
         secondary: album.artist,
-        image: album.image
+        image: album.image || 'https://lastfm.freetls.fastly.net/i/u/300x300/4128a6eb29f94943c9d206c08e625904.jpg'
       }))
     } else if (options.entity === Entity.ARTIST) {
       const chart = await this.lastfmService.getArtistsChart(
@@ -91,7 +92,7 @@ export class DuotoneTheme implements Theme {
 
       items = chart.items.map((artist, index) => ({
         name: artist.name,
-        image: this.resolveImage(artists, index) || '' // @todo: default image
+        image: this.resolveImage(artists, index) || 'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png' // @todo: default image
       }))
     } else if (options.entity === Entity.TRACK) {
       const chart = await this.lastfmService.getTracksChart(
@@ -112,7 +113,7 @@ export class DuotoneTheme implements Theme {
       items = chart.items.map((track, index) => ({
         name: track.name,
         secondary: track.artist,
-        image: this.resolveImage(tracks, index) || ''
+        image: this.resolveImage(tracks, index) || 'https://lastfm.freetls.fastly.net/i/u/300x300/4128a6eb29f94943c9d206c08e625904.jpg'
       }))
     } else {
       throw new Error('Wrong entity')
@@ -130,10 +131,13 @@ export class DuotoneTheme implements Theme {
 
     // console.log(tileSize)
 
+    const userData = this.lastfmService.userGetInfo(user)
+
     return {
       items,
-      palette: options.palette,
-      title: `${user} TOP ${options.entity}S`.toUpperCase()
+      palette: this.palettes[options.palette],
+      title: `MOST LISTENED ${options.entity}S`,
+      subtitle: `LAST ${options.period} • ${scrobbleCount} SCROBBLES`
     }
   }
 
@@ -156,7 +160,7 @@ export class DuotoneTheme implements Theme {
 
       entity: entitiesResolverJoi,
 
-      style: Joi.string()
+      palette: Joi.string()
         .valid(...Object.keys(this.palettes))
         .required()
     })

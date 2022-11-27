@@ -5,8 +5,8 @@ services:
     ports:
       - 2037:2037
     volumes:
-      - /share/export:/home/export
-      - /share/media:/home/media
+      - ./share/export:/home/export
+      - ./share/media:/home/media
       - ./gorfe.yaml:/go/app/bin/config.yaml
     environment:
       SENTRY_DSN: $SENTRY_DSN
@@ -15,8 +15,8 @@ services:
     ports:
       - 9815:9815
     volumes:
-      - /share/export:/home/export
-      - /share/media:/home/media
+      - ./share/export:/home/export
+      - ./share/media:/home/media
       - ./luyten.yaml:/usr/src/app/config.yaml
   database:
     image: postgres:13
