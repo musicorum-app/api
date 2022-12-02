@@ -18,4 +18,11 @@ export class CollagesController {
 
     return this.collagesService.generateCollage(data, application.id)
   }
+
+  @UseGuards(ApiKeyGuard)
+  @Post('generate-grid')
+  async generateGrid(
+    @Body() body: unknown,
+    @RequestApplication() application
+  ) {}
 }

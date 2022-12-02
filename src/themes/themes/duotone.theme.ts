@@ -75,7 +75,9 @@ export class DuotoneTheme implements Theme {
       items = chart.items.map((album) => ({
         name: album.name,
         secondary: album.artist,
-        image: album.image || 'https://lastfm.freetls.fastly.net/i/u/300x300/4128a6eb29f94943c9d206c08e625904.jpg'
+        image:
+          album.image ||
+          'https://lastfm.freetls.fastly.net/i/u/300x300/4128a6eb29f94943c9d206c08e625904.jpg'
       }))
     } else if (options.entity === Entity.ARTIST) {
       const chart = await this.lastfmService.getArtistsChart(
@@ -92,7 +94,9 @@ export class DuotoneTheme implements Theme {
 
       items = chart.items.map((artist, index) => ({
         name: artist.name,
-        image: this.resolveImage(artists, index) || 'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png' // @todo: default image
+        image:
+          this.resolveImage(artists, index) ||
+          'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png' // @todo: default image
       }))
     } else if (options.entity === Entity.TRACK) {
       const chart = await this.lastfmService.getTracksChart(
@@ -113,7 +117,9 @@ export class DuotoneTheme implements Theme {
       items = chart.items.map((track, index) => ({
         name: track.name,
         secondary: track.artist,
-        image: this.resolveImage(tracks, index) || 'https://lastfm.freetls.fastly.net/i/u/300x300/4128a6eb29f94943c9d206c08e625904.jpg'
+        image:
+          this.resolveImage(tracks, index) ||
+          'https://lastfm.freetls.fastly.net/i/u/300x300/4128a6eb29f94943c9d206c08e625904.jpg'
       }))
     } else {
       throw new Error('Wrong entity')
