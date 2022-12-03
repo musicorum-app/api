@@ -35,9 +35,23 @@ export class CollagesController {
     if (error) throw new ValidationException(error)
 
     const id = nanoid(24)
+    const origins = ['lastfm', 'scdn', 'dzcdn']
+    const tiles = value.tiles.map((tile) => {
+      if (!tile.image) {
+        return tile
+      }
+      const url = new URL(tile.image)
+      console.log(url.origin)
+      const includes = origins.some((o) => url.origin.includes(o))
+
+      return {
+        name: tile.name,
+        image: includes ? tile.image : null
+      }
+    })
 
     const themeData = {
-      tiles: value.tiles,
+      tiles: tiles,
       rows: 10,
       columns: 10,
       show_names: false,
