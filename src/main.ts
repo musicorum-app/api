@@ -1,19 +1,48 @@
-import { Logger, VersioningType } from '@nestjs/common'
-import { NestFactory } from '@nestjs/core'
-import { MusicorumModule } from './app.module'
+import Fastify from 'fastify'
+import cors from '@fastify/cors'
+import { authRoutes } from '~auth/routes/index.js'
+import { collagesRoutes } from '~collages/routes/index.js'
+import { HttpError } from '@utils/HttpError.js'
+import { ValidationError } from 'yup'
+import { log } from '@musicorum/coloris'
 
-async function main() {
-  const logger = new Logger('MusicorumApi')
-  const app = await NestFactory.create(MusicorumModule)
+const server = Fastify()
 
-  app.enableCors()
+server.register(cors)
 
-  app.enableVersioning({
-    type: VersioningType.URI
-  })
+// routes
+server.register(authRoutes, { prefix: 'auth' })
+server.register(collagesRoutes, { prefix: 'collages' })
 
-  await app.listen(3000)
-  logger.log(`Server listening on :3000`)
-}
+server.setErrorHandler((error, request, reply) => {
+  if (error instanceof HttpError) {
+    return reply.status(error.statusCode || 500).send({
+      statusCode: error.statusCode || 500,
+      error: 'Something went wrong',
+      message: error.message
+    })
+  } else if (error instanceof ValidationError) {
+    return reply.status(400).send({
+      statusCode: 400,
+      error: 'Validation error',
+      message: error.message,
+      validation: error.errors
+    })
+  } else {
+    throw error
+  }
+})
 
-main()
+server.listen(
+  {
+    port: 3000
+  },
+  (error, address) => {
+    if (error) {
+      console.error(error)
+      process.exit(1)
+    }
+
+    log.info('server', `listening at ${address}`)
+  }
+)

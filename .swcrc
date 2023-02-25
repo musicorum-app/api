@@ -1,12 +1,12 @@
 {
-  "compilerOptions": {
+  "$schema": "https://json.schemastore.org/swcrc",
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": true
+    },
+    "target": "es2022",
     "baseUrl": ".",
-    "incremental": true,
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "NodeNext",
-    "strictNullChecks": true,
-    "allowSyntheticDefaultImports": true,
     "paths": {
       // realms
       "~collages/*": ["./src/realms/collages/*"],
@@ -15,10 +15,11 @@
       "@utils/*": ["./src/utils/*"],
       "@services/*": ["./src/services/*"],
       "@types/*": ["./src/types/*"],
-      
       "~/*": ["./src/*"],
     }
   },
-  "include": ["src/**/*"],
-  "outDir": "dist"
+  "module": {
+    "type": "es6"
+  },
+  "sourceMaps": true
 }

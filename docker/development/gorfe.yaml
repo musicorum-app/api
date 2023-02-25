@@ -1,7 +1,0 @@
-port: 2037
-name: Bolina
-media_path: /home/media/
-export_path: /home/export/
-
-grid:
-  quality: 78

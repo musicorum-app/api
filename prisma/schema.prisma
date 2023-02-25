@@ -9,16 +9,23 @@ datasource db {
 
 model Application {
   id         String    @id @db.VarChar(16)
+  
   name       String
   key        String    @unique @db.VarChar(32)
   secret     String    @unique @db.VarChar(32)
+  
   created_at DateTime  @default(now())
   updated_at DateTime?
-  Collage    Collage[]
+  
+  collages    Collage[]
+
+  @@map("applications")
 }
 
 model Collage {
   id                 String      @id @db.VarChar(24)
+  app_id             String?     @db.VarChar(16)
+
   success            Boolean
   total_duration     Float
   render_duration    Float?
@@ -26,8 +33,11 @@ model Collage {
   file               String?
   theme              String?     @db.VarChar(32)
   error              String?
-  app_id             String?     @db.VarChar(16)
+  
   created_at         DateTime    @default(now())
   updated_at         DateTime?
+  
   application        Application? @relation(fields: [app_id], references: [id])
+
+  @@map("collages")
 }
