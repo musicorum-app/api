@@ -45,7 +45,14 @@ export async function generateCollage(payload: CollagePayload, appId: string) {
 
   return {
     result,
-    workerPayload,
+    workerPayload: {
+      id,
+      theme: 'grid',
+      hide_username: payload.hide_username,
+      user: null,
+      story: false,
+      data: workerPayload
+    },
     duration: end - start
   }
 }
