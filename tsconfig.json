@@ -4,7 +4,7 @@
     "incremental": true,
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "node",
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "paths": {

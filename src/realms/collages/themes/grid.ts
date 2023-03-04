@@ -1,8 +1,10 @@
-import { Theme, Themes } from '~collages/types/themes.js'
+import { Theme, Themes } from '~collages/types/themes'
 import * as Yup from 'yup'
-import { entityValidation, periodValidation } from '@utils/commonValidations.js'
-import { Entity, Period } from '~/common.js'
-import { lastfmClient } from '@services/lastfm.js'
+import { entityValidation, periodValidation } from '@utils/commonValidations'
+import { Entity, Period } from '~/common'
+import { lastfmClient } from '@services/lastfm'
+import { Period as LastfmClientPeriod } from '@musicorum/lastfm/dist/types/packages/common'
+import { getArtistResources } from '@services/resources'
 
 type GridStyle = 'DEFAULT' | 'CAPTION' | 'SHADOW'
 export interface GridGenerationPayload {
@@ -20,7 +22,7 @@ interface GridTile {
   image: string
   name: string
   secondary?: string
-  playcount?: number
+  playCount?: number
 }
 
 export interface GridWorkerPayload {
@@ -58,14 +60,39 @@ export const gridTheme: Theme<Themes['grid']> = {
     if (payload.options.entity === Entity.ALBUM) {
       const { albums } = await lastfmClient.user.getTopAlbums(payload.user, {
         limit: size,
-        period: payload.options.period as unknown as '7day'
+        period: payload.options.period as unknown as LastfmClientPeriod
       })
 
       tiles = albums.map((a) => ({
         name: a.name,
         secondary: a.artist.name,
         image: a.images.at(-1)!.url,
-        playcount: a.playCount
+        playCount: a.playCount
+      }))
+    } else if (payload.options.entity === Entity.ARTIST) {
+      const { artists } = await lastfmClient.user.getTopArtists(payload.user, {
+        limit: size,
+        period: payload.options.period as unknown as LastfmClientPeriod
+      })
+
+      // const resources = await getArtistResources()
+
+      tiles = artists.map((a) => ({
+        name: a.name,
+        image: a.images.at(-1)!.url,
+        playCount: a.playCount
+      }))
+    } else if (payload.options.entity === Entity.TRACK) {
+      const { tracks } = await lastfmClient.user.getTopTracks(payload.user, {
+        limit: size,
+        period: payload.options.period as unknown as LastfmClientPeriod
+      })
+
+      tiles = tracks.map((t) => ({
+        name: t.name,
+        secondary: t.artist.name,
+        image: t.images.at(-1)!.url,
+        playcount: t.playCount
       }))
     }
 

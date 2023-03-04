@@ -1,6 +1,7 @@
 import { requireApplicationGuard } from '@services/guard/appGuard.js'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { generateCollage } from '~collages/modules/collage.js'
+import { themes } from '~collages/themes/themes'
 import { collagePayloadValidation } from '~collages/validation/collage.js'
 
 export async function generateController(
@@ -11,5 +12,14 @@ export async function generateController(
 
   const generationPayload = collagePayloadValidation.validateSync(req.body)
 
-  return generateCollage(generationPayload, app.id)
+  const options = themes[generationPayload.theme].validationSchema.validateSync(
+    generationPayload.options
+  )
+
+  const payload = {
+    ...generationPayload,
+    options
+  }
+
+  return generateCollage(payload, app.id)
 }

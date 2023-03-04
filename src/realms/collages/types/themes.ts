@@ -32,7 +32,7 @@ export interface CollagePayload<
 export interface Theme<T extends ThemeType> {
   name: string
   needsUserData: boolean
-  validationSchema: Yup.Schema
+  validationSchema: Yup.Schema<T['generationPayload']>
 
   handlePayload(
     payload: CollagePayload<T['generationPayload']>
