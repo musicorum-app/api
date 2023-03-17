@@ -57,7 +57,7 @@ export const gridTheme: Theme<Themes['grid']> = {
 
     const size = payload.options.columns * payload.options.rows
 
-    if (payload.options.entity === Entity.ALBUM) {
+    if (payload.options.entity === Entity.Album) {
       const { albums } = await lastfmClient.user.getTopAlbums(payload.user, {
         limit: size,
         period: payload.options.period as unknown as LastfmClientPeriod
@@ -69,7 +69,7 @@ export const gridTheme: Theme<Themes['grid']> = {
         image: a.images.at(-1)!.url,
         playCount: a.playCount
       }))
-    } else if (payload.options.entity === Entity.ARTIST) {
+    } else if (payload.options.entity === Entity.Artist) {
       const { artists } = await lastfmClient.user.getTopArtists(payload.user, {
         limit: size,
         period: payload.options.period as unknown as LastfmClientPeriod
@@ -82,7 +82,7 @@ export const gridTheme: Theme<Themes['grid']> = {
         image: a.images.at(-1)!.url,
         playCount: a.playCount
       }))
-    } else if (payload.options.entity === Entity.TRACK) {
+    } else if (payload.options.entity === Entity.Track) {
       const { tracks } = await lastfmClient.user.getTopTracks(payload.user, {
         limit: size,
         period: payload.options.period as unknown as LastfmClientPeriod

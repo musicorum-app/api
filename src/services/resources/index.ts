@@ -1,3 +1,1 @@
-export function getArtistResources() {
-  
-}
+export function getArtistResources() {}

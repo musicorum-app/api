@@ -1,14 +1,14 @@
 export enum Period {
-  SEVEN_DAYS = '7DAY',
-  ONE_MONTH = '1MONTH',
-  THREE_MONTHS = '3MONTH',
-  SIX_MONTHS = '6MONTH',
-  TWELVE_MONTHS = '12MONTH',
-  OVERALL = 'OVERALL'
+  SevenDays = '7DAY',
+  OneMonth = '1MONTH',
+  ThreeMonths = '3MONTH',
+  SixMonths = '6MONTH',
+  TwelveMonths = '12MONTH',
+  Overall = 'OVERALL'
 }
 
 export enum Entity {
-  ARTIST = 'ARTIST',
-  ALBUM = 'ALBUM',
-  TRACK = 'TRACK'
+  Artist = 'ARTIST',
+  Album = 'ALBUM',
+  Track = 'TRACK'
 }

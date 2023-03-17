@@ -15,7 +15,7 @@
       "@utils/*": ["./src/utils/*"],
       "@services/*": ["./src/services/*"],
       "@types/*": ["./src/types/*"],
-      "~/*": ["./src/*"],
+      "~/*": ["./src/*"]
     }
   },
   "module": {

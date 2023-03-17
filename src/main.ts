@@ -1,8 +1,8 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
-import { authRoutes } from '~auth/routes/index.js'
-import { collagesRoutes } from '~collages/routes/index.js'
-import { HttpError } from '@utils/HttpError.js'
+import { authRoutes } from '~auth/routes/index'
+import { collagesRoutes } from '~collages/routes/index'
+import { HttpError } from '@utils/HttpError'
 import { ValidationError } from 'yup'
 import { log } from '@musicorum/coloris'
 
