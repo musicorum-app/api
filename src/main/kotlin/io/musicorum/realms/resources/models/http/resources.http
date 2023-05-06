@@ -1,0 +1,7 @@
+POST localhost:8080/resources/artists
+Content-Type: application/json
+Authorization: Super Super
+
+{
+  "artists": ["Kendrick Lamar"]
+}

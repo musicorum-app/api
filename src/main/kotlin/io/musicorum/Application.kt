@@ -6,6 +6,7 @@ import io.ktor.server.netty.*
 import io.musicorum.koin.installKoin
 import io.musicorum.plugins.*
 import io.musicorum.realms.auth.createAuthRoutes
+import io.musicorum.realms.resources.createResourcesRoutes
 import io.musicorum.security.configureSecurity
 
 fun main() {
@@ -21,6 +22,7 @@ fun Application.module() {
 //    configureDatabases()
     configureRouting()
 
+    createResourcesRoutes()
     createAuthRoutes()
 
 }
