@@ -1,7 +1,7 @@
-POST localhost:8080/resources/artists
+POST {{api_url}}/resources/artists
 Content-Type: application/json
-Authorization: Super Super
+Authorization: Super chuu
 
 {
-  "artists": ["Kendrick Lamar"]
+  "artists": ["NewJeans"]
 }

@@ -48,6 +48,7 @@ dependencies {
     implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
     implementation("io.ktor:ktor-client-cio-jvm:2.2.4")
     implementation("io.ktor:ktor-client-logging-jvm:2.2.4")
+    implementation("io.ktor:ktor-client-jetty:2.2.4")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
