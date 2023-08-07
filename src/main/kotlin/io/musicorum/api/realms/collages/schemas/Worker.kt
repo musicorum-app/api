@@ -48,8 +48,12 @@ data class Worker(
         }
     }
 
-    suspend fun generate(payload: WorkerGeneratePayload<Theme.IWorkerData>) {
+    suspend fun generate(payload: WorkerGeneratePayload<Theme.IWorkerData>): WorkerGenerationResponse {
+        val response = client.post("/generate") {
+            setBody(payload)
+        }
 
+        return response.body<WorkerGenerationResponse>()
     }
 
     @Serializable
@@ -70,5 +74,12 @@ data class Worker(
         @SerialName("hide_username")
         val hideUsername: Boolean,
         val data: T
+    )
+
+    @Serializable
+    data class WorkerGenerationResponse(
+        val error: Boolean,
+        val file: String,
+        val time: Int
     )
 }

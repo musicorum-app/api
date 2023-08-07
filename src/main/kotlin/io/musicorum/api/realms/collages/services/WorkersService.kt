@@ -6,7 +6,7 @@ import io.musicorum.api.enums.EnvironmentVariable
 import io.musicorum.api.realms.collages.schemas.Worker
 import kotlinx.coroutines.*
 
-internal val LOGGER = KtorSimpleLogger("io.musicorum.realms.collages.services.WorkersService")
+private val LOGGER = KtorSimpleLogger("io.musicorum.realms.collages.services.WorkersService")
 
 class WorkersService {
     val workers = ArrayList<Worker>()

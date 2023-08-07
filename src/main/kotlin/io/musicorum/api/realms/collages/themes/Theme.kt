@@ -2,11 +2,12 @@ package io.musicorum.api.realms.collages.themes
 
 import kotlinx.serialization.Serializable
 
-abstract class Theme<WORKER_DATA: Theme.IWorkerData, GENERATION_DATA: Theme.IGenerationData> {
-    abstract val name: String
+interface Theme {
+    val name: String
 
-    abstract suspend fun handleGenerationData(data: CollagePayload<GENERATION_DATA>): WORKER_DATA
+    suspend fun handleGenerationData(data: CollagePayload<IGenerationData>): IWorkerData
 
+    @Serializable
     data class CollagePayload<T>(
         val user: String,
         val theme: String,

@@ -1,0 +1,19 @@
+POST {{api-url}}/collages
+Content-Type: application/json
+Authorization: Super {{super-password}}
+
+{
+  "user": "metye",
+  "theme": "grid",
+  "hide_username": false,
+  "options": {
+    "style": "STYLE",
+    "showNames": true,
+    "showPlayCount": true,
+    "padded": false,
+    "columns": 10,
+    "rows": 10,
+    "entity": "ALBUM",
+    "period": "OVERALL"
+  }
+}

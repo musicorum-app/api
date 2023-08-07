@@ -9,13 +9,16 @@ import kotlinx.serialization.Serializable
 
 class GridTheme(
     val resourcesService: ResourcesService,
-) : Theme<GridTheme.IWorkerData, GridTheme.GenerationData>() {
+) : Theme {
     override val name = "grid"
-    override suspend fun handleGenerationData(data: CollagePayload<GenerationData>): IWorkerData {
+    override suspend fun handleGenerationData(data: Theme.CollagePayload<Theme.IGenerationData>): Theme.IWorkerData {
         val tiles: List<GridTile>
+        val options = data.options as GenerationData
 
-        if (data.options.entity == Entity.Album) {
-            val albums = UserEndpoint.getTopAlbums(data.user, data.options.period)
+        val size = options.columns * options.rows
+
+        if (options.entity == Entity.Album) {
+            val albums = UserEndpoint.getTopAlbums(data.user, options.period, size)
 
             tiles = albums.map {
                 GridTile(
@@ -28,14 +31,14 @@ class GridTheme(
             throw NotImplementedError("This entity is not implemented for this theme")
         }
 
-        return IWorkerData(
+        return WorkerData(
             tiles = tiles,
-            style = data.options.style,
-            columns = data.options.columns,
-            rows = data.options.rows,
-            padded = data.options.padded,
-            showNames = data.options.showNames,
-            showPlayCount = data.options.showPlayCount,
+            style = options.style,
+            columns = options.columns,
+            rows = options.rows,
+            padded = options.padded,
+            showNames = options.showNames,
+            showPlayCount = options.showPlayCount,
             tileSize = 300
         )
     }
@@ -49,7 +52,7 @@ class GridTheme(
     )
 
     @Serializable
-    data class IWorkerData(
+    data class WorkerData(
         val tiles: List<GridTile>,
         val padded: Boolean,
         val rows: Int,
@@ -74,5 +77,5 @@ class GridTheme(
         val padded: Boolean,
         val period: Period,
         val entity: Entity,
-    ): IGenerationData
+    ): Theme.IGenerationData
 }

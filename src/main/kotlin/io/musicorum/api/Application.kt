@@ -8,7 +8,7 @@ import io.musicorum.api.plugins.installStatusPages
 import io.musicorum.api.koin.installKoin
 import io.musicorum.api.plugins.configureHTTP
 import io.musicorum.api.realms.auth.createAuthRoutes
-import io.musicorum.api.realms.collages.createCollagesRoutes
+import io.musicorum.api.realms.collages.routes.createCollagesRoutes
 import io.musicorum.api.realms.resources.createResourcesRoutes
 import io.musicorum.api.security.configureSecurity
 
