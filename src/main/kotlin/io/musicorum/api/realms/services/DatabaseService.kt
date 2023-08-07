@@ -1,4 +1,4 @@
-package io.musicorum.api.services
+package io.musicorum.api.realms.services
 
 import org.jetbrains.exposed.sql.Database
 

@@ -1,10 +1,10 @@
-package io.musicorum.api.services.api.lastfm.endpoints
+package io.musicorum.api.realms.services.api.lastfm.endpoints
 
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.musicorum.api.enums.Period
-import io.musicorum.api.services.api.lastfm.lastfmClient
-import io.musicorum.api.services.api.lastfm.schemas.album.UserTopAlbum
+import io.musicorum.api.realms.services.api.lastfm.lastfmClient
+import io.musicorum.api.realms.services.api.lastfm.schemas.album.UserTopAlbum
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 

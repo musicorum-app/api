@@ -1,4 +1,4 @@
-package io.musicorum.api.services.api.lastfm
+package io.musicorum.api.realms.services.api.lastfm
 
 import io.ktor.client.*
 import io.ktor.client.plugins.*

@@ -3,7 +3,7 @@ package io.musicorum.api.realms.auth.services
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import io.musicorum.api.plugins.runQuery
 import io.musicorum.api.realms.auth.schemas.Client
-import io.musicorum.api.services.DatabaseService
+import io.musicorum.api.realms.services.DatabaseService
 import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.javatime.timestamp

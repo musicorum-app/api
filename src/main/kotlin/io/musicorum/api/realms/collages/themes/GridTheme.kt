@@ -3,7 +3,7 @@ package io.musicorum.api.realms.collages.themes
 import io.musicorum.api.enums.Entity
 import io.musicorum.api.enums.Period
 import io.musicorum.api.realms.resources.services.ResourcesService
-import io.musicorum.api.services.api.lastfm.endpoints.UserEndpoint
+import io.musicorum.api.realms.services.api.lastfm.endpoints.UserEndpoint
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
