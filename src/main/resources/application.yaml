@@ -1,4 +1,4 @@
 ktor:
   application:
     modules:
-      - io.musicorum.ApplicationKt.module
+      - io.musicorum.api.ApplicationKt.module
