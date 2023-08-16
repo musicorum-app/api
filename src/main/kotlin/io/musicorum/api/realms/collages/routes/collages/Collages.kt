@@ -4,32 +4,41 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.musicorum.api.realms.collages.repositories.CollagesRepository
 import io.musicorum.api.realms.collages.services.CollagesService
 import io.musicorum.api.realms.collages.themes.Theme
-import kotlinx.serialization.Contextual
+import io.musicorum.api.realms.collages.themes.serialization.ThemeData
+import io.musicorum.api.realms.collages.themes.serialization.ThemeDataSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
 
 fun Route.createCollageRoute() {
     val collagesService = inject<CollagesService>()
+    val collagesRepository = inject<CollagesRepository>()
 
     post {
-        val payload = call.receive<CollagePayloadReq>()
+          val payload = call.receive<CollagePayloadReq>()
 
-//        val data = collagesService.value.create(payload)
+        val data = collagesService.value.create(Theme.CollagePayload(
+                user = payload.user,
+                theme =  payload.theme,
+                hideUsername = payload.hideUsername
+        ))
 
-        call.respond(payload)
+        call.respond(data)
+    }
+
+    get {
+        call.respond(collagesRepository.value.listAll())
     }
 }
 
 @Serializable
 data class CollagePayloadReq(
     val user: String,
-    val theme: String,
-    val options: Map<String, @Contextual Any>,
+    @Serializable(with = ThemeDataSerializer::class)
+    val theme: ThemeData,
     @SerialName("hide_username")
     val hideUsername: Boolean,
 )

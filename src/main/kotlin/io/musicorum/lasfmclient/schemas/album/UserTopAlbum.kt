@@ -1,6 +1,6 @@
-package io.musicorum.api.realms.services.api.lastfm.schemas.album
+package io.musicorum.lasfmclient.schemas.album
 
-import io.musicorum.api.realms.services.api.lastfm.schemas.Image
+import io.musicorum.lasfmclient.schemas.Image
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -3,22 +3,23 @@ package io.musicorum.api.realms.collages.themes
 import io.musicorum.api.enums.Entity
 import io.musicorum.api.enums.Period
 import io.musicorum.api.realms.resources.services.ResourcesService
-import io.musicorum.api.realms.services.api.lastfm.endpoints.UserEndpoint
+import io.musicorum.api.services.lastfmClient
+import io.musicorum.lasfmclient.endpoints.UserEndpoint
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 class GridTheme(
     val resourcesService: ResourcesService,
 ) : Theme {
-    override val name = "grid"
-    override suspend fun handleGenerationData(data: Theme.CollagePayload<Theme.IGenerationData>): Theme.IWorkerData {
+    override val name = "classic_collage"
+    override suspend fun handleGenerationData(data: Theme.CollagePayload): Theme.IWorkerData {
         val tiles: List<GridTile>
-        val options = data.options as GenerationData
+        val options = data.theme.options as GenerationData
 
         val size = options.columns * options.rows
 
         if (options.entity == Entity.Album) {
-            val albums = UserEndpoint.getTopAlbums(data.user, options.period, size)
+            val albums = lastfmClient.user.getTopAlbums(data.user, options.period, size)
 
             tiles = albums.map {
                 GridTile(

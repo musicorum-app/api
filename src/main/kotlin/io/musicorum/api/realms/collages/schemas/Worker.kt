@@ -11,12 +11,13 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.musicorum.api.realms.collages.themes.Theme
+import io.musicorum.api.realms.collages.themes.ThemeEnum
 import io.musicorum.api.realms.resources.services.jsonConfig
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 data class Worker(
-    val url: String
+        val url: String
 ) {
     var engine: String? = null
     var name: String? = null
@@ -56,30 +57,44 @@ data class Worker(
         return response.body<WorkerGenerationResponse>()
     }
 
-    @Serializable
-    private data class MetadataResponse(
-        val name: String,
-        val engine: String,
-        val scheme: Int,
-        val themes: List<String>,
-        val version: Int
+    fun toSerializable() = SerializableWorker(
+            name = name.orEmpty(),
+            engine = engine.orEmpty(),
+            availableThemes = availableThemes
     )
 
     @Serializable
-    data class WorkerGeneratePayload<T: Theme.IWorkerData>(
-        val id: String,
-        val theme: String,
-        val user: Int?,
-        val story: Boolean,
-        @SerialName("hide_username")
-        val hideUsername: Boolean,
-        val data: T
+    data class SerializableWorker(
+            val name: String,
+            val engine: String,
+            @SerialName("available_themes")
+            val availableThemes: List<String>
+    )
+
+    @Serializable
+    private data class MetadataResponse(
+            val name: String,
+            val engine: String,
+            val scheme: Int,
+            val themes: List<String>,
+            val version: Int
+    )
+
+    @Serializable
+    data class WorkerGeneratePayload<T : Theme.IWorkerData>(
+            val id: String,
+            val theme: ThemeEnum,
+            val user: Int?,
+            val story: Boolean,
+            @SerialName("hide_username")
+            val hideUsername: Boolean,
+            val data: T
     )
 
     @Serializable
     data class WorkerGenerationResponse(
-        val error: Boolean,
-        val file: String,
-        val time: Int
+            val error: Boolean,
+            val file: String,
+            val time: Int
     )
 }

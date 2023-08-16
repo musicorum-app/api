@@ -4,16 +4,18 @@ Authorization: Super {{super-password}}
 
 {
   "user": "metye",
-  "theme": "grid",
-  "hide_username": false,
-  "options": {
-    "style": "STYLE",
-    "showNames": true,
-    "showPlayCount": true,
-    "padded": false,
-    "columns": 10,
-    "rows": 10,
-    "entity": "ALBUM",
-    "period": "OVERALL"
-  }
+  "theme": {
+    "name": "classic_collage",
+    "options": {
+      "style": "STYLE",
+      "show_names": true,
+      "show_playcount": true,
+      "padded": false,
+      "columns": 10,
+      "rows": 10,
+      "entity": "ALBUM",
+      "period": "OVERALL"
+    }
+  },
+  "hide_username": false
 }

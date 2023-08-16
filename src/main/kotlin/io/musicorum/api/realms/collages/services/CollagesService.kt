@@ -1,33 +1,36 @@
 package io.musicorum.api.realms.collages.services
 
-import io.ktor.server.application.*
 import io.ktor.util.logging.*
-import io.musicorum.api.enums.Entity
 import io.musicorum.api.enums.EnvironmentVariable
-import io.musicorum.api.enums.Period
-import io.musicorum.api.generateNanoId
+import io.musicorum.api.realms.collages.repositories.CollagesRepository
+import io.musicorum.api.utils.generateNanoId
 import io.musicorum.api.realms.collages.schemas.Worker
 import io.musicorum.api.realms.collages.themes.GridTheme
 import io.musicorum.api.realms.collages.themes.Theme
+import io.musicorum.api.realms.collages.themes.ThemeEnum
 import io.musicorum.api.realms.resources.services.ResourcesService
 import kotlinx.datetime.Clock
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 private val LOGGER = KtorSimpleLogger("io.musicorum.api.realms.collages.services.CollagesService")
 
-class CollagesService(private val workersService: WorkersService, private val resourcesService: ResourcesService) {
+class CollagesService(
+    private val workersService: WorkersService,
+    private val resourcesService: ResourcesService,
+    private val collagesRepository: CollagesRepository
+) {
     private val gridTheme = GridTheme(resourcesService)
 
-    suspend fun create(data: Theme.CollagePayload<Theme.IGenerationData>): CollageResponse {
+    suspend fun create(data: Theme.CollagePayload): CollageResponse {
         val start = Clock.System.now()
         val id = generateNanoId(32)
 
-        val themeName = data.theme
-        val theme = getTheme(themeName)
+        val themeName = data.theme.name
+        val themeImpl = getTheme(themeName)
 
-        val worker = workersService.getWorkerForTheme(themeName) ?: throw Exception("No available worker for this theme")
-        val workerData = theme.handleGenerationData(data)
+        val worker =
+            workersService.getWorkerForTheme(themeName) ?: throw Exception("No available worker for this theme")
+        val workerData = themeImpl.handleGenerationData(data)
 
         val payload = Worker.WorkerGeneratePayload(
             theme = themeName,
@@ -46,9 +49,11 @@ class CollagesService(private val workersService: WorkersService, private val re
         val generationDuration = (end - generationStart).inWholeMilliseconds
         val totalDuration = (end - start).inWholeMilliseconds
 
-        LOGGER.info("Generation for theme $theme took ${totalDuration}ms (${generationDuration}ms on worker)")
+        LOGGER.info("Generation for theme $themeImpl took ${totalDuration}ms (${generationDuration}ms on worker)")
 
         val resultUrl = System.getenv(EnvironmentVariable.ResultUrl) + generation.file
+
+        collagesRepository.createOne(id, generation.file, generationDuration)
 
         return CollageResponse(
             duration = totalDuration,
@@ -58,15 +63,14 @@ class CollagesService(private val workersService: WorkersService, private val re
         )
     }
 
-    private fun getTheme(themeName: String): Theme {
-        return when (themeName) {
-            "classic_grid" -> gridTheme
-            else -> throw InvalidBodyException("This theme does not exist")
+    private fun getTheme(theme: ThemeEnum): Theme {
+        return when (theme) {
+            ThemeEnum.ClassicCollage -> gridTheme
         }
     }
 
     @Serializable
-    data class CollageResponse (
+    data class CollageResponse(
         val duration: Long,
         val file: String,
         val id: String,

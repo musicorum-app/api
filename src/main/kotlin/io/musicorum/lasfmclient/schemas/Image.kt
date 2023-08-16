@@ -1,4 +1,4 @@
-package io.musicorum.api.realms.services.api.lastfm.schemas
+package io.musicorum.lasfmclient.schemas
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

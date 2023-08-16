@@ -4,6 +4,7 @@ import io.ktor.util.logging.*
 import io.ktor.utils.io.*
 import io.musicorum.api.enums.EnvironmentVariable
 import io.musicorum.api.realms.collages.schemas.Worker
+import io.musicorum.api.realms.collages.themes.ThemeEnum
 import kotlinx.coroutines.*
 
 private val LOGGER = KtorSimpleLogger("io.musicorum.realms.collages.services.WorkersService")
@@ -40,8 +41,8 @@ class WorkersService {
         }
     }
 
-    fun getWorkerForTheme(theme: String): Worker? {
+    fun getWorkerForTheme(theme: ThemeEnum): Worker? {
         // @todo: use a better matcher for the worker, instead of just getting the first
-        return this.workers.find { it.availableThemes.contains(theme) }
+        return this.workers.find { it.availableThemes.contains(theme.themeName) }
     }
 }

@@ -1,26 +1,26 @@
 package io.musicorum.api.realms.auth.services
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils
-import io.musicorum.api.plugins.runQuery
 import io.musicorum.api.realms.auth.schemas.Client
-import io.musicorum.api.realms.services.DatabaseService
+import io.musicorum.api.services.database
+import io.musicorum.api.services.runQuery
 import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Instant
 
-class ClientService(private val databaseService: DatabaseService) {
+class ClientService {
     object Clients : Table("clients") {
         val id = varchar("id", 20)
         val name = varchar("name", 64)
-        var key = varchar("key", 323)
+        var key = varchar("key", 32)
         var createdAt = timestamp("created_at").clientDefault { Instant.now() }
         var updatedAt = timestamp("updated_at").nullable()
     }
 
     init {
-        transaction {
+        transaction(database) {
             SchemaUtils.create(Clients)
         }
     }
