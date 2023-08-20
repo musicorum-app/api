@@ -1,6 +1,7 @@
-package io.musicorum.lasfmclient.schemas.album
+package io.musicorum.lasfmclient.schemas.user
 
 import io.musicorum.lasfmclient.schemas.Image
+import io.musicorum.lasfmclient.schemas.Album
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -40,6 +41,4 @@ data class UserTopAlbum(
             }
         }
     }
-
-
 }

@@ -16,7 +16,7 @@ fun Application.installStatusPages() {
         }
 
         exception<Throwable> { call, cause ->
-            println(cause.cause)
+            cause.printStackTrace()
             if (cause.cause is JsonConvertException) {
                 println(cause.message)
                 println(cause.cause)

@@ -4,9 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ArtistResource(
+data class TrackResource(
     override val hash: String,
     override val name: String,
+    val album: String?,
+    val artists: List<String>?,
     override val resources: List<ImageResource>,
     @SerialName("preferred_resource")
     override val preferredResource: String?,
@@ -17,6 +19,12 @@ data class ArtistResource(
 ): ResourceItem()
 
 @Serializable
-data class ArtistResourcesRequest(
-    val artists: List<String>
-)
+data class TrackResourceRequest(
+    val tracks: List<Item>
+) {
+    @Serializable
+    data class Item(
+        val name: String,
+        val artist: String
+    )
+}

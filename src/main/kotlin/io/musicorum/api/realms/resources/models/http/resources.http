@@ -5,3 +5,18 @@ Authorization: Super chuu
 {
   "artists": ["NewJeans"]
 }
+
+###
+
+POST http://localhost:4040/find/tracks?sources=lastfm
+Content-Type: application/json
+Authorization: Super chuu
+
+{
+  "tracks": [
+    {
+      "name": "flight 22",
+      "artist": "Kali Uchis"
+    }
+  ]
+}

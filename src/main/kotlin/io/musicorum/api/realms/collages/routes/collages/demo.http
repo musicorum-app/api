@@ -11,10 +11,10 @@ Authorization: Super {{super-password}}
       "show_names": true,
       "show_playcount": true,
       "padded": false,
-      "columns": 10,
-      "rows": 10,
-      "entity": "ALBUM",
-      "period": "OVERALL"
+      "columns": 8,
+      "rows": 8,
+      "entity": "TRACK",
+      "period": "1MONTH"
     }
   },
   "hide_username": false

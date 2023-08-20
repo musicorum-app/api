@@ -25,15 +25,15 @@ class CollagesService(
         val start = Clock.System.now()
         val id = generateNanoId(32)
 
-        val themeName = data.theme.name
-        val themeImpl = getTheme(themeName)
+        val theme = data.theme.name
+        val themeImpl = getTheme(theme)
 
         val worker =
-            workersService.getWorkerForTheme(themeName) ?: throw Exception("No available worker for this theme")
+            workersService.getWorkerForTheme(theme) ?: throw Exception("No available worker for this theme")
         val workerData = themeImpl.handleGenerationData(data)
 
         val payload = Worker.WorkerGeneratePayload(
-            theme = themeName,
+            theme = theme,
             hideUsername = false,
             user = null,
             id = id,
@@ -53,7 +53,7 @@ class CollagesService(
 
         val resultUrl = System.getenv(EnvironmentVariable.ResultUrl) + generation.file
 
-        collagesRepository.createOne(id, generation.file, generationDuration)
+        collagesRepository.createOne(id, theme, generation.file, generationDuration)
 
         return CollageResponse(
             duration = totalDuration,

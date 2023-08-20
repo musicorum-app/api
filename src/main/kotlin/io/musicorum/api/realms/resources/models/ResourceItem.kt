@@ -1,12 +1,17 @@
 package io.musicorum.api.realms.resources.models
 
-interface ResourceItem {
-    val hash: String
-    val name: String
+abstract class ResourceItem {
+    abstract val hash: String
+    abstract val name: String
 
-    val resources: List<ImageResource>
-    val preferredResource: String?
+    abstract val resources: List<ImageResource>
+    abstract val preferredResource: String?
 
-    val createdAt: String
-    val updatedAt: String?
+    abstract val createdAt: String
+    abstract val updatedAt: String?
+
+    fun getLastfmResourceOrOther(): ImageResource? {
+        val lastfmResource = this.resources.find { it.source === ImageResource.ImageSource.LASTFM }
+        return lastfmResource ?: this.resources.getOrNull(0)
+    }
 }

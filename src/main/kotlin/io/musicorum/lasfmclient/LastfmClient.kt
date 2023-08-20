@@ -5,11 +5,10 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
-import io.musicorum.api.enums.EnvironmentVariable
-import io.musicorum.lasfmclient.endpoints.UserEndpoint
+import io.musicorum.lasfmclient.namespaces.UserEndpoint
 import kotlinx.serialization.json.Json
 
-private val jsonConfig = Json { ignoreUnknownKeys = true }
+internal val jsonConfig = Json { ignoreUnknownKeys = true }
 
 class LastfmClient (
     private val key: String

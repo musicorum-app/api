@@ -6,6 +6,7 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -17,7 +18,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 data class Worker(
-        val url: String
+    val url: String
 ) {
     var engine: String? = null
     var name: String? = null
@@ -26,6 +27,10 @@ data class Worker(
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(jsonConfig)
+        }
+        install(Logging) {
+            logger = Logger.DEFAULT
+            level = LogLevel.BODY
         }
         defaultRequest {
             url(this@Worker.url)
@@ -58,43 +63,43 @@ data class Worker(
     }
 
     fun toSerializable() = SerializableWorker(
-            name = name.orEmpty(),
-            engine = engine.orEmpty(),
-            availableThemes = availableThemes
+        name = name.orEmpty(),
+        engine = engine.orEmpty(),
+        availableThemes = availableThemes
     )
 
     @Serializable
     data class SerializableWorker(
-            val name: String,
-            val engine: String,
-            @SerialName("available_themes")
-            val availableThemes: List<String>
+        val name: String,
+        val engine: String,
+        @SerialName("available_themes")
+        val availableThemes: List<String>
     )
 
     @Serializable
     private data class MetadataResponse(
-            val name: String,
-            val engine: String,
-            val scheme: Int,
-            val themes: List<String>,
-            val version: Int
+        val name: String,
+        val engine: String,
+        val scheme: Int,
+        val themes: List<String>,
+        val version: Int
     )
 
     @Serializable
     data class WorkerGeneratePayload<T : Theme.IWorkerData>(
-            val id: String,
-            val theme: ThemeEnum,
-            val user: Int?,
-            val story: Boolean,
-            @SerialName("hide_username")
-            val hideUsername: Boolean,
-            val data: T
+        val id: String,
+        val theme: ThemeEnum,
+        val user: Int?,
+        val story: Boolean,
+        @SerialName("hide_username")
+        val hideUsername: Boolean,
+        val data: T
     )
 
     @Serializable
     data class WorkerGenerationResponse(
-            val error: Boolean,
-            val file: String,
-            val time: Int
+        val error: Boolean,
+        val file: String,
+        val time: Int
     )
 }
