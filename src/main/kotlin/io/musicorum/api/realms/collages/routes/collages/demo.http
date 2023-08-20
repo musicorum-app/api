@@ -1,0 +1,21 @@
+POST {{api-url}}/collages
+Content-Type: application/json
+Authorization: Super {{super-password}}
+
+{
+  "user": "metye",
+  "theme": {
+    "name": "classic_collage",
+    "options": {
+      "style": "STYLE",
+      "show_names": true,
+      "show_playcount": true,
+      "padded": false,
+      "columns": 8,
+      "rows": 8,
+      "entity": "TRACK",
+      "period": "1MONTH"
+    }
+  },
+  "hide_username": false
+}
