@@ -19,12 +19,24 @@ fun Application.createAuthRoutes() {
     val clientService = inject<ClientService>()
 
     routing {
-        authenticate(AuthenticationMethod.Super) {
-            post("/clients") {
-                val obj = call.receive<ClientCreationDAO>()
-                val client = clientService.value.createOne(obj.name)
+        route("/auth") {
+            authenticate(AuthenticationMethod.Super) {
+                route("/clients") {
+                    post {
+                        val obj = call.receive<ClientCreationDAO>()
+                        val client = clientService.value.createOne(obj.name)
 
-                call.respond(client)
+                        call.respond(client)
+                    }
+
+                    get {
+                        val clients = clientService.value.listAll()
+
+                        call.respond(mapOf(
+                            "clients" to clients
+                        ))
+                    }
+                }
             }
         }
     }

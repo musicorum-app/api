@@ -25,6 +25,10 @@ class ClientService {
         }
     }
 
+    suspend fun listAll() = runQuery {
+        Clients.selectAll().map { mapResultToClient(it) }
+    }
+
     suspend fun getByKey(key: String): Client? = runQuery {
         Clients.select { Clients.key eq key }.firstOrNull().let {
             return@runQuery mapNullableResultToClient(it)
