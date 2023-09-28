@@ -11,7 +11,12 @@ fun Application.configureHTTP() {
         allowMethod(HttpMethod.Delete)
         allowMethod(HttpMethod.Patch)
         allowHeader(HttpHeaders.Authorization)
+        allowHeader(HttpHeaders.ContentType)
         allowHeader("*")
+
+        allowCredentials = true
+        maxAgeInSeconds = 3600
+
         anyHost()
     }
 }
