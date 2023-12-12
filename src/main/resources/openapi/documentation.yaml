@@ -1,0 +1,264 @@
+openapi: "3.0.3"
+info:
+  title: "api API"
+  description: "api API"
+  version: "1.0.0"
+servers:
+- url: "https://api"
+paths:
+  /collages:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Collage"
+    post:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/CollagePayloadReq"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema: {}
+  /workers:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/WorkersResponse"
+  /resources/artists:
+    post:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/ArtistResourcesRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ArtistResource"
+  /auth/clients:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Map_String"
+    post:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/ClientCreationDAO"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Client"
+components:
+  schemas:
+    Instant:
+      type: "object"
+      properties: {}
+    Collage:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        theme:
+          type: "string"
+          enum:
+          - "ClassicCollage"
+        file:
+          type: "string"
+        duration:
+          type: "integer"
+          format: "int64"
+        createdAt:
+          $ref: "#/components/schemas/Instant"
+    IGenerationData:
+      type: "object"
+      properties: {}
+    ThemeData:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+          enum:
+          - "ClassicCollage"
+        options:
+          $ref: "#/components/schemas/IGenerationData"
+    CollagePayloadReq:
+      type: "object"
+      properties:
+        user:
+          type: "string"
+        theme:
+          $ref: "#/components/schemas/ThemeData"
+        hideUsername:
+          type: "boolean"
+    ExceptionResponse:
+      type: "object"
+      properties:
+        message:
+          type: "string"
+    CollageResponse:
+      type: "object"
+      properties:
+        duration:
+          type: "integer"
+          format: "int64"
+        file:
+          type: "string"
+        id:
+          type: "string"
+        url:
+          type: "string"
+    SerializableWorker:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        engine:
+          type: "string"
+        availableThemes:
+          type: "array"
+          items:
+            type: "string"
+    WorkersResponse:
+      type: "object"
+      properties:
+        workers:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/SerializableWorker"
+    ArtistResourcesRequest:
+      type: "object"
+      properties:
+        artists:
+          type: "array"
+          items:
+            type: "string"
+    Image:
+      type: "object"
+      properties:
+        hash:
+          type: "string"
+        size:
+          type: "string"
+          enum:
+          - "EXTRA_SMALL"
+          - "SMALL"
+          - "MEDIUM"
+          - "LARGE"
+          - "EXTRA_LARGE"
+        url:
+          type: "string"
+    ColorPalette:
+      type: "object"
+      properties:
+        vibrant:
+          type: "string"
+        darkVibrant:
+          type: "string"
+        lightVibrant:
+          type: "string"
+        muted:
+          type: "string"
+        darkMuted:
+          type: "string"
+        lightMuted:
+          type: "string"
+    ImageResource:
+      type: "object"
+      properties:
+        hash:
+          type: "string"
+        explicit:
+          type: "boolean"
+        active:
+          type: "boolean"
+        source:
+          type: "string"
+          enum:
+          - "SPOTIFY"
+          - "LASTFM"
+          - "DEEZER"
+        images:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Image"
+        colorPalette:
+          $ref: "#/components/schemas/ColorPalette"
+        createdAt:
+          type: "string"
+    ArtistResource:
+      type: "object"
+      properties:
+        hash:
+          type: "string"
+        name:
+          type: "string"
+        resources:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ImageResource"
+        preferredResource:
+          type: "string"
+        createdAt:
+          type: "string"
+        updatedAt:
+          type: "string"
+    Map:
+      type: "object"
+      properties: {}
+    Map_String:
+      type: "string"
+    ClientCreationDAO:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    Client:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        key:
+          type: "string"
+        createdAt:
+          $ref: "#/components/schemas/Instant"
+        updatedAt:
+          $ref: "#/components/schemas/Instant"

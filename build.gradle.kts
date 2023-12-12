@@ -32,6 +32,12 @@ repositories {
 }
 
 dependencies {
+    // OpenAPI docs
+    implementation("io.ktor:ktor-server-openapi:$ktor_version")
+
+    // Swagger
+    implementation("io.ktor:ktor-server-swagger:$ktor_version")
+
     // Ktor
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
