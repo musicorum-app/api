@@ -17,7 +17,10 @@ object ThemeDataSerializer : KSerializer<ThemeData> {
         val data = decoder.decodeSerializableValue(InputTheme.serializer())
 
         val r = when (data.name) {
-            ThemeEnum.ClassicCollage -> ThemeData(data.name, Json.decodeFromJsonElement<GridTheme.GenerationData>(data.options))
+            ThemeEnum.ClassicCollage -> ThemeData(
+                data.name,
+                Json.decodeFromJsonElement<GridTheme.GenerationData>(data.options)
+            )
         }
 
         println("END")
