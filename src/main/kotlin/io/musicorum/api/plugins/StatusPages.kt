@@ -3,11 +3,9 @@ package io.musicorum.api.plugins
 import io.ktor.http.*
 import io.ktor.serialization.*
 import io.ktor.server.application.*
-import io.ktor.server.plugins.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
 
 fun Application.installStatusPages() {
     install(StatusPages) {
@@ -21,10 +19,12 @@ fun Application.installStatusPages() {
                 println(cause.message)
                 println(cause.cause)
                 return@exception call.respond(
+                    HttpStatusCode.BadRequest,
                     ExceptionResponse("Serialization error: " + cause.message)
                 )
             }
             call.respond(
+                HttpStatusCode.BadRequest,
                 ExceptionResponse(cause.message ?: "Unknown error")
             )
         }
