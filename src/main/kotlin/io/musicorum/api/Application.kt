@@ -8,6 +8,7 @@ import io.musicorum.api.plugins.installStatusPages
 import io.musicorum.api.koin.installKoin
 import io.musicorum.api.plugins.configureHTTP
 import io.musicorum.api.realms.auth.createAuthRoutes
+import io.musicorum.api.realms.charts.routes.createChartRoutes
 import io.musicorum.api.realms.collages.routes.createCollagesRoutes
 import io.musicorum.api.realms.docs.createDocsRoute
 import io.musicorum.api.realms.resources.createResourcesRoutes
@@ -31,4 +32,5 @@ fun Application.module() {
     createAuthRoutes()
     createCollagesRoutes()
     createDocsRoute()
+    createChartRoutes()
 }
