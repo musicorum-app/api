@@ -11,6 +11,7 @@ import io.musicorum.api.realms.auth.createAuthRoutes
 import io.musicorum.api.realms.charts.routes.createChartRoutes
 import io.musicorum.api.realms.collages.routes.createCollagesRoutes
 import io.musicorum.api.realms.docs.createDocsRoute
+import io.musicorum.api.realms.party.routes.createPartyRoutes
 import io.musicorum.api.realms.resources.createResourcesRoutes
 import io.musicorum.api.security.configureSecurity
 
@@ -33,4 +34,6 @@ fun Application.module() {
     createCollagesRoutes()
     createDocsRoute()
     createChartRoutes()
+
+    createPartyRoutes()
 }
