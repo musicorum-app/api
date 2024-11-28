@@ -9,4 +9,5 @@ object EnvironmentVariable {
     const val DatabaseUri = "DATABASE_URI"
     const val DatabaseUser = "DATABASE_USER"
     const val DatabasePassword = "DATABASE_PASS"
+    const val PartiesUrl = "PARTIES_URL"
 }
