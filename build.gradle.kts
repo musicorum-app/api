@@ -32,8 +32,6 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.crackthecodeabhi:kreds:0.9.1")
-
     // OpenAPI docs
     implementation("io.ktor:ktor-server-openapi:$ktor_version")
 
