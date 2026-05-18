@@ -3,6 +3,7 @@ package io.musicorum.api.plugins
 import io.ktor.http.*
 import io.ktor.serialization.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import kotlinx.serialization.Serializable
@@ -11,6 +12,11 @@ fun Application.installStatusPages() {
     install(StatusPages) {
         status(HttpStatusCode.NotFound) { call, status ->
             call.respondText(text = "404: Page Not Found", status = status)
+        }
+
+        exception<RequestValidationException> {call, cause ->
+            println(cause)
+            return@exception
         }
 
         exception<Throwable> { call, cause ->

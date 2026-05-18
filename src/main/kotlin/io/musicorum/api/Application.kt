@@ -3,6 +3,7 @@ package io.musicorum.api
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.requestvalidation.*
 import io.musicorum.api.plugins.configureSerialization
 import io.musicorum.api.plugins.installStatusPages
 import io.musicorum.api.koin.installKoin
@@ -19,6 +20,7 @@ fun main() {
 }
 
 fun Application.module() {
+    install(RequestValidation)
     installKoin()
     configureSecurity()
     configureHTTP()
